@@ -1,0 +1,71 @@
+/* 
+  Localizable.strings
+  shuLaiBao
+
+  Created by liudeng on 16/2/29.
+  Copyright © 2016年 liudeng. All rights reserved.
+*/
+// 画一画
+"backStr" = "退出";                                     //返回按钮
+"saveStr" = "保存";                                     //保存按钮
+"littlePainterStr" = "小画家";                          //小画家
+"changePictureStr" = "更换图片";                         //更换图片
+"changeBackgroundStr" = "更换背景";                      //更换背景
+"brushSettingStr" = "画笔设置";                          //画笔设置
+"brushStr" = "画笔";                                     //画笔
+"eraserStr" = "橡皮擦";                                  //橡皮擦
+"okStr" = "完成" ;                                        //完成
+"customColorStr" = "自定义颜色";                            //自定义颜色
+"brushSettings" = "画笔粗细";                            //画笔粗细
+"tip" = "提示";                             // 提示
+"saveSecusess" = "保存成功";
+"connectFail" = "似乎已断开与互联网的连接";                   // 网络连接失败
+"restorePurchase" = "恢复购买";                             // 恢复购买
+
+// 玩一玩
+"scoreStr" = "得分:";                                    //得分
+"numberOfQuestions" = "题数:";                           //题目数
+"continueStr" = "继续";                                   //继续
+"giveUpStr" = "放弃";                                                  // 放弃
+"startStr" = "开始游戏";                                                // 开始游戏
+"questionStr" = "题目";                                                // 题目
+"commitStr" = "确定";                                                  // 确定
+"nextQuestion" = "下一题";                                             // 下一题
+"congratulationStr" = "恭喜您,回答正确!";                               // 恭喜你,回答正确
+"gamesFail" = "游戏失败";                                              // 游戏失败
+"sorryWrongStr" = "很遗憾,回答错误\n正确答案为";                          // 很遗憾,回答错误,正确答案为
+"gameOverStr" = "游戏结束!";                                           // 游戏结束
+"againGameStr" = "再玩一次";                                           // 再玩儿一次
+"allStr" = "共";                                                      // 共
+"correctStr" = "答对";                                                // 答对
+"wrongStr" = "答错";                                                  // 答错
+"failStr" = "失败";                                                   // 失败
+"acountStr" = "道";                                                   // 道
+"intermediate" = "中级";                                              // 中级
+"junior" = "初级";                                                    // 初级
+"senior" = "高级";                                                    // 高级
+
+
+// 数一数
+"ineedStr" = "我需要";                                                 //我需要
+"bunchStr" = "串";                                                    //串
+"sorryFalil" = "很遗憾你回答错误!";                                     //很遗憾你回答错误!
+"countAgainGameStr" = "再数一次";                                      //再数一次
+
+//设置
+"smartBabyStr" = "聪乐宝";                                            // 聪乐宝
+"aboutSmartBaby" = "    聪乐宝专门为4-6岁儿童所设计的一款关于数学计算和动手画画的App,画一画版面以提供线稿的方式来启蒙宝宝动手画出漂亮的画面而设计.玩一玩功能将以玩游戏的方式来练习宝宝对数学计算的兴趣.数一数功能将是宝宝练习数数的最佳选择,可以使宝宝数10以内的数字.\n    我们将打造更好玩儿的App,在这里希望您给我们提供更好的建议或反馈,我们将不胜感激. "; //关于聪乐宝
+"praiseStr" = "给聪乐宝好评" ;
+"parentStr" = "家长区";                         // 家长区
+"rightStr" = "右";                              // 右
+"upStr" = "上";                                 // 上
+"downStr" = "下";                               // 下
+"leftStr" = "左";                               // 左
+"pleaseTwoFinger" = "请 用 两 指 向";                 // 请用两指向
+"swipeStr" = "轻 扫";                             // 轻扫
+
+
+
+
+
+

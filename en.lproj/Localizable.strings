@@ -1,0 +1,67 @@
+/* 
+  Localizable.strings
+  shuLaiBao
+
+  Created by liudeng on 16/2/29.
+  Copyright © 2016年 liudeng. All rights reserved.
+*/
+
+// 画一画
+"backStr" = "back";                                             //返回按钮
+"saveStr" = "save";                                             //保存按钮
+"littlePainterStr" = "Little painter";                          //小画家
+"changePictureStr" = "Change Pic";                              //更换图片
+"changeBackgroundStr" = "Change picture";                       //更换背景
+"brushSettingStr" = "Brush Set";                                //画笔设置
+"brushStr" = "Brush";                                           //画笔
+"eraserStr" = "Eraser";                                         //橡皮擦
+"okStr" = "OK";                                         //完成
+"customColorStr" = "Color";                            //自定义颜色
+"brushSettings" = "Thickness";                            //画笔粗细
+"tip" = "tip";                             // 提示
+"saveSecusess" = "Saved successfully";     //保存成功
+"connectFail" = "Connect Fail";                   // 网络连接失败
+"restorePurchase" = "Restore";                             // 恢复购买
+
+
+
+// 玩一玩
+"scoreStr" = "Score:";                                         //得分
+"numberOfQuestions" = "Moves:";                                //题目数
+"continueStr" = "Continue";                                    //继续
+"giveUpStr" = "Give Up";                                       //放弃
+"startStr" = "Start";                                          //开始游戏
+"questionStr" = "Question";                                   //题目
+"commitStr" = "OK";                                   //确定
+"nextQuestion" = "Next Que";                                   //下一题
+ "congratulationStr" = "Congratulations!";                                   //恭喜你,回答正确
+"gamesFail" = "Games Fail !";                                   //游戏失败
+"sorryWrongStr" = "Wrong!\nthe correct answer is";                                   //很遗憾,回答错误,正确答案为
+"gameOverStr" = "Game Over!";                                   //游戏结束
+"againGameStr" = "Again Game";                               //再玩儿一次
+"allStr" = "All";                                            //共
+"correctStr" = "Correct:";                                   //答对
+"wrongStr" = "Wrong:";                                       //答错
+"failStr" = "Fail:";                                         //失败
+"acountStr" = "";                                            //道
+"intermediate" = "Intermediate";                                              // 中级
+"junior" = "Junior";                                                    // 初级
+"senior" = "Senior";                                                    // 高级
+
+// 数一数
+"ineedStr" = "I need ";                                            //我需要
+"bunchStr" = "";                                            //串
+"sorryFalil" = "Sorry! Answser is Wrong!";                                            //很遗憾你回答错误!
+"countAgainGameStr" = "Again Game";                                 //再数一次
+
+// 设置
+"smartBabyStr" = "Smart Baby";                                            // 聪乐宝
+"aboutSmartBaby" = "      Smart Baby specially designed for children 4~6.Painting to enlightenment baby hands make beautiful pictures.Play function the way the game will be played .Count function will be the best choice baby practice counting, you can make the number of babies within 10 digital.\n     We will build a better play the App, where I hope you give us a better suggestion or feedback, we will Greatful. "; //关于聪乐宝
+"praiseStr" = "SmartBaby Praise" ;           // 给动了报好评
+"parentStr" = "Parent Only";                 // 家长区
+"rightStr" = "right";                              // 右
+"upStr" = "up";                                 // 上
+"downStr" = "down";                               // 下
+"leftStr" = "left";                               // 左
+"pleaseTwoFinger" = "Please swipe";                 // 请用两指向
+"swipeStr" = "with two fingers";                             // 轻扫
