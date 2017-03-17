@@ -13,11 +13,11 @@ import UIKit
 
 class SLBPencilBrush: SLBBaseBrushTool {
     
-    override func drawInContext(context: CGContextRef) {
+    override func drawInContext(_ context: CGContext) {
         if let lastPoint = self.lastPoint {
             if (self.lastPoint != self.endPoint){
-            CGContextMoveToPoint(context, lastPoint.x, lastPoint.y)
-            CGContextAddLineToPoint(context, endPoint.x, endPoint.y)
+            context.move(to: CGPoint(x: lastPoint.x, y: lastPoint.y))
+            context.addLine(to: CGPoint(x: endPoint.x, y: endPoint.y))
             }
         } else {
 //            CGContextMoveToPoint(context, beginPoint.x, beginPoint.y)

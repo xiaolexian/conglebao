@@ -12,11 +12,11 @@ import UIKit
 
 class SLBAddPreviewColorTool: UIView {
     var btnArray = [UIButton]()
-    let colorArray = [UIColor.redColor(), UIColor.blueColor(), UIColor.greenColor(), UIColor.yellowColor(),UIColor.orangeColor(), UIColor.purpleColor()]
+    let colorArray = [UIColor.red, UIColor.blue, UIColor.green, UIColor.yellow,UIColor.orange, UIColor.purple]
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.clearColor()
+        backgroundColor = UIColor.clear
         
         
         for index in 1...6{
@@ -25,7 +25,7 @@ class SLBAddPreviewColorTool: UIView {
             btn.tag = index
             btn.layer.masksToBounds = true
             addSubview(btn)
-            btn.addTarget(self, action: #selector(SLBAddPreviewColorTool.btnClick(_:)), forControlEvents: .TouchUpInside)
+            btn.addTarget(self, action: #selector(SLBAddPreviewColorTool.btnClick(_:)), for: .touchUpInside)
             btn.backgroundColor = colorArray[index - 1]
             btnArray.append(btn)
         }
@@ -42,11 +42,11 @@ class SLBAddPreviewColorTool: UIView {
     override func layoutSubviews() {
         for indext in 0..<btnArray.count{
             let btn = btnArray[indext]
-            btn.frame = CGRectMake(10 + CGFloat(indext) * CGFloat(btnW + padding), 0, btnW, btnW)
+            btn.frame = CGRect(x: 10 + CGFloat(indext) * CGFloat(btnW + padding), y: 0, width: btnW, height: btnW)
         }
     }
     
-    func btnClick(sender: UIButton){
+    func btnClick(_ sender: UIButton){
         
     }
 

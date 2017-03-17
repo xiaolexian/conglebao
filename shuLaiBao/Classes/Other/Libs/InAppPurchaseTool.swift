@@ -10,7 +10,8 @@ import Foundation
 import StoreKit
 
 class InAppPurchaseTool: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserver {
-
+    
+    
     
     // 各种状态的通知
     let kInAppProductPurchasedNotification = "InAppProductPurchasedNotification"
@@ -24,32 +25,29 @@ class InAppPurchaseTool: NSObject, SKProductsRequestDelegate, SKPaymentTransacti
     // 内购单例
     class var sharedInstance : InAppPurchaseTool {
         struct Static {
-            static var onceToken: dispatch_once_t = 0
-            static var instance: InAppPurchaseTool? = nil
+             static var instance: InAppPurchaseTool = InAppPurchaseTool()
         }
-        dispatch_once(&Static.onceToken) {
-            Static.instance = InAppPurchaseTool()
-        }
-        return Static.instance!
+         return Static.instance
     }
     
     override init() {
         super.init()
-        SKPaymentQueue.defaultQueue().addTransactionObserver(self)
+        SKPaymentQueue.default().add(self)
     }
     
-    func buyProduct(product: SKProduct) {
+    func buyProduct(_ product: SKProduct) {
         print("发送付款请求到Apple")
         let payment = SKPayment(product: product)
-        SKPaymentQueue.defaultQueue().addPayment(payment)
+        SKPaymentQueue.default().add(payment)
     }
     
-    func request(request: SKRequest, didFailWithError error: NSError) {
+    func request(_ request: SKRequest, didFailWithError error: Error) {
         print("Error %@ \(error)")
-        NSNotificationCenter.defaultCenter().postNotificationName(kInAppPurchasingErrorNotification, object: error.description)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: kInAppPurchasingErrorNotification), object: error.localizedDescription)
+        
     }
     
-    func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
+    func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         print("从apple得到请求信息")
         let count: Int = response.products.count
         if count > 0 {
@@ -66,34 +64,34 @@ class InAppPurchaseTool: NSObject, SKProductsRequestDelegate, SKPaymentTransacti
     }
 
     
-    func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         print("从Apple接受付款交易信息");
         
         for transaction: AnyObject in transactions {
             if let trans: SKPaymentTransaction = transaction as? SKPaymentTransaction {
                 switch trans.transactionState {
-                case .Purchased:
+                case .purchased:
                     print("支付成功")
                     
                     savePurchasedProductIdentifier(trans.payment.productIdentifier)
-                    SKPaymentQueue.defaultQueue().finishTransaction(transaction as! SKPaymentTransaction)
-                    NSNotificationCenter.defaultCenter().postNotificationName(kInAppProductPurchasedNotification, object: nil)
+                    SKPaymentQueue.default().finishTransaction(transaction as! SKPaymentTransaction)
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: kInAppProductPurchasedNotification), object: nil)
                     
                     receiptValidation()
                     
                     break
                     
-                case .Failed:
+                case .failed:
                     print("支付失败")
-                    SKPaymentQueue.defaultQueue().finishTransaction(transaction as! SKPaymentTransaction)
-                    NSNotificationCenter.defaultCenter().postNotificationName(kInAppPurchaseFailedNotification, object: nil)
+                    SKPaymentQueue.default().finishTransaction(transaction as! SKPaymentTransaction)
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: kInAppPurchaseFailedNotification), object: nil)
                     break
                     
-                case .Restored:
+                case .restored:
                     print("产品恢复成功!")
                     savePurchasedProductIdentifier(trans.payment.productIdentifier)
-                    SKPaymentQueue.defaultQueue().finishTransaction(transaction as! SKPaymentTransaction)
-                    NSNotificationCenter.defaultCenter().postNotificationName(kInAppProductRestoredNotification, object: nil)
+                    SKPaymentQueue.default().finishTransaction(transaction as! SKPaymentTransaction)
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: kInAppProductRestoredNotification), object: nil)
                     break
                     
                 default:
@@ -107,33 +105,33 @@ class InAppPurchaseTool: NSObject, SKProductsRequestDelegate, SKPaymentTransacti
     }
     
     func restoreTransactions() {
-        SKPaymentQueue.defaultQueue().restoreCompletedTransactions()
+        SKPaymentQueue.default().restoreCompletedTransactions()
     }
   
-    func savePurchasedProductIdentifier(productIdentifier: String!) {
-        NSUserDefaults.standardUserDefaults().setObject(productIdentifier, forKey: productIdentifier)
-        NSUserDefaults.standardUserDefaults().synchronize()
+    func savePurchasedProductIdentifier(_ productIdentifier: String!) {
+        UserDefaults.standard.set(productIdentifier, forKey: productIdentifier)
+        UserDefaults.standard.synchronize()
     }
     
     func receiptValidation() {
         
-        let receiptFileURL = NSBundle.mainBundle().appStoreReceiptURL
-        let receiptData = NSData(contentsOfURL: receiptFileURL!)
-        let recieptString = receiptData?.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
-        let jsonDict: [String: AnyObject] = ["receipt-data" : recieptString!, "password" : "dab3f8e770384d99ae7dda0096529a30"]
+        let receiptFileURL = Bundle.main.appStoreReceiptURL
+        let receiptData = try? Data(contentsOf: receiptFileURL!)
+        let recieptString = receiptData?.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
+        let jsonDict: [String: AnyObject] = ["receipt-data" : recieptString! as AnyObject, "password" : "dab3f8e770384d99ae7dda0096529a30" as AnyObject]
         
         do {
-            let requestData = try NSJSONSerialization.dataWithJSONObject(jsonDict, options: NSJSONWritingOptions.PrettyPrinted)
+            let requestData = try JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions.prettyPrinted)
             
-            let storeURL = NSURL(string: "https://sandbox.itunes.apple.com/verifyReceipt")!
-            let storeRequest = NSMutableURLRequest(URL: storeURL)
-            storeRequest.HTTPMethod = "POST"
-            storeRequest.HTTPBody = requestData
+            let storeURL = URL(string: "https://sandbox.itunes.apple.com/verifyReceipt")!
+            let storeRequest = NSMutableURLRequest(url: storeURL)
+            storeRequest.httpMethod = "POST"
+            storeRequest.httpBody = requestData
             
-            let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-            let task = session.dataTaskWithRequest(storeRequest, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            let session = URLSession.shared
+            let task = session.dataTask(with: storeURL, completionHandler: { (data, response, error) in
                 do {
-                    let jsonResponse = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)
+                    let jsonResponse = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)
                     print(jsonResponse)
                     if let date = self.getExpirationDateFromResponse(jsonResponse as! NSDictionary) {
                         print(date)
@@ -141,6 +139,7 @@ class InAppPurchaseTool: NSObject, SKProductsRequestDelegate, SKPaymentTransacti
                 } catch let parseError {
                     print(parseError)
                 }
+
             })
             task.resume()
         } catch let parseError {
@@ -148,16 +147,16 @@ class InAppPurchaseTool: NSObject, SKProductsRequestDelegate, SKPaymentTransacti
         }
     }
     
-    func getExpirationDateFromResponse(jsonResponse: NSDictionary) -> NSDate? {
+    func getExpirationDateFromResponse(_ jsonResponse: NSDictionary) -> Date? {
         
         if let receiptInfo: NSArray = jsonResponse["latest_receipt_info"] as? NSArray {
             
             let lastReceipt = receiptInfo.lastObject as! NSDictionary
-            let formatter = NSDateFormatter()
+            let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd HH:mm:ss VV"
             
             if let expiresDate = lastReceipt["expires_date"] as? String {
-                let expirationDate: NSDate = formatter.dateFromString(expiresDate) as NSDate!
+                let expirationDate: Date = formatter.date(from: expiresDate) as Date!
                 return expirationDate
             }
             
@@ -168,7 +167,7 @@ class InAppPurchaseTool: NSObject, SKProductsRequestDelegate, SKPaymentTransacti
         }
     }
     
-    func unlockProduct(productIdentifier: String!) {
+    func unlockProduct(_ productIdentifier: String!) {
         if SKPaymentQueue.canMakePayments() {
             let productID: NSSet = NSSet(object: productIdentifier)
             let productsRequest: SKProductsRequest = SKProductsRequest(productIdentifiers: productID as! Set<String>)
@@ -178,11 +177,11 @@ class InAppPurchaseTool: NSObject, SKProductsRequestDelegate, SKPaymentTransacti
         }
         else {
             print("Сan't make purchases")
-            NSNotificationCenter.defaultCenter().postNotificationName(kInAppPurchasingErrorNotification, object: NSLocalizedString("CANT_MAKE_PURCHASES", comment: "Can't make purchases"))
+            NotificationCenter.default.post(name: Notification.Name(rawValue: kInAppPurchasingErrorNotification), object: NSLocalizedString("CANT_MAKE_PURCHASES", comment: "Can't make purchases"))
         }
     }
     
-    func drawBackgroundInAppPurchaseProduct(item:Int) {
+    func drawBackgroundInAppPurchaseProduct(_ item:Int) {
          unlockProduct(productAttay[item])
     }
     

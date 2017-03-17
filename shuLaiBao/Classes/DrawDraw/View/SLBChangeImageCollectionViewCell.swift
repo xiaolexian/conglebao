@@ -17,27 +17,27 @@ class SLBChangeImageCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.whiteColor()
+        backgroundColor = UIColor.white
         
         // 图片
         pictureImage = UIImageView()
         let collectionViewWH = CGFloat(Int((MyScreenWith - 40) / 3))
-        pictureImage.contentMode = .ScaleAspectFit
-        pictureImage.frame = CGRectMake(0, 0, collectionViewWH, collectionViewWH)
+        pictureImage.contentMode = .scaleAspectFit
+        pictureImage.frame = CGRect(x: 0, y: 0, width: collectionViewWH, height: collectionViewWH)
         addSubview(pictureImage)
         
         // 边框
         boardImage = UIImageView()
         boardImage.image = UIImage(named: "boards")
-         boardImage.contentMode = .ScaleAspectFit
+         boardImage.contentMode = .scaleAspectFit
         boardImage.frame = pictureImage.frame
         boardImage.height = boardImage.height + 1
         addSubview(boardImage)
         
         // 边框
         lockImage = UIImageView()
-        lockImage.contentMode = .ScaleAspectFit
-        lockImage.frame = CGRectMake(pictureImage.width - 27.5, pictureImage.height - 32, 27.5, 32)
+        lockImage.contentMode = .scaleAspectFit
+        lockImage.frame = CGRect(x: pictureImage.width - 27.5, y: pictureImage.height - 32, width: 27.5, height: 32)
         lockImage.height = lockImage.height + 1
         addSubview(lockImage)
         

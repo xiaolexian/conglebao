@@ -12,7 +12,7 @@ protocol PaintBrush {
     /**  表示是否连续不断地绘图  */
     func supportedContinuousDrawing() -> Bool;
     /**  基于Context（上下文）的绘图方法，子类必须实现具体的绘图  */
-    func drawInContext(context: CGContextRef)
+    func drawInContext(_ context: CGContext)
 }
 
 /**
@@ -32,7 +32,7 @@ class SLBBaseBrushTool: NSObject, PaintBrush {
         return false
     }
     
-    func drawInContext(context: CGContextRef) {
+    func drawInContext(_ context: CGContext) {
         assert(false, "must implements in subclass")
     }
 }

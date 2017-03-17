@@ -9,8 +9,8 @@
 import UIKit
 
 class SLBEraserTool: SLBPencilBrush {
-    override func drawInContext(context: CGContextRef) {
-        CGContextSetBlendMode(context, .Clear)
+    override func drawInContext(_ context: CGContext) {
+        context.setBlendMode(.clear)
         super.drawInContext(context)
     }
 }

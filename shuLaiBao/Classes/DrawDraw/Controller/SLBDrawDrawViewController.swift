@@ -28,10 +28,10 @@ class SLBDrawDrawViewController: UIViewController, UIScrollViewDelegate {
         // 点击画板的block
         self.drawDrawV.paintViewTool.drawingStateChangeBlock = {(state: DrawingState)->()in
             
-            if state != .Moved {
-                if state == .Began{
-                    UIView.animateWithDuration(0.3, animations: { () -> Void in
-                        self.brushSettingView.frame = CGRectMake(0, MyScreenHeight , MyScreenWith, 300)
+            if state != .moved {
+                if state == .began{
+                    UIView.animate(withDuration: 0.3, animations: { () -> Void in
+                        self.brushSettingView.frame = CGRect(x: 0, y: MyScreenHeight , width: MyScreenWith, height: 300)
                         }, completion: nil)
                  }
             }
@@ -49,20 +49,20 @@ class SLBDrawDrawViewController: UIViewController, UIScrollViewDelegate {
         drawDrawV.drawDrawScrollView.minimumZoomScale = 1
         
         // 按钮的事件方法
-        drawDrawV.backButton.addTarget(self, action: #selector(SLBDrawDrawViewController.backButtonClick), forControlEvents: .TouchUpInside)
-        drawDrawV.saveBtn.addTarget(self, action: #selector(SLBDrawDrawViewController.saveBtnClick), forControlEvents: .TouchUpInside)
-        drawDrawV.eraserBtn.addTarget(self, action: #selector(SLBDrawDrawViewController.eraserBtnClick(_:)), forControlEvents: .TouchUpInside)
-        drawDrawV.drawPencil.addTarget(self, action: #selector(SLBDrawDrawViewController.drawPencilBtnClick(_:)), forControlEvents: .TouchUpInside)
-        drawDrawV.drawSetting.addTarget(self, action: #selector(SLBDrawDrawViewController.drawSettingBtnClick), forControlEvents: .TouchUpInside)
-        drawDrawV.changeImageBtn.addTarget(self, action: #selector(SLBDrawDrawViewController.changeImageBtnClick), forControlEvents: .TouchUpInside)
-        drawDrawV.allScreenBtn.addTarget(self, action: #selector(SLBDrawDrawViewController.allScreenBtnClick(_:)), forControlEvents: .TouchUpInside)
+        drawDrawV.backButton.addTarget(self, action: #selector(SLBDrawDrawViewController.backButtonClick), for: .touchUpInside)
+        drawDrawV.saveBtn.addTarget(self, action: #selector(SLBDrawDrawViewController.saveBtnClick), for: .touchUpInside)
+        drawDrawV.eraserBtn.addTarget(self, action: #selector(SLBDrawDrawViewController.eraserBtnClick(_:)), for: .touchUpInside)
+        drawDrawV.drawPencil.addTarget(self, action: #selector(SLBDrawDrawViewController.drawPencilBtnClick(_:)), for: .touchUpInside)
+        drawDrawV.drawSetting.addTarget(self, action: #selector(SLBDrawDrawViewController.drawSettingBtnClick), for: .touchUpInside)
+        drawDrawV.changeImageBtn.addTarget(self, action: #selector(SLBDrawDrawViewController.changeImageBtnClick), for: .touchUpInside)
+        drawDrawV.allScreenBtn.addTarget(self, action: #selector(SLBDrawDrawViewController.allScreenBtnClick(_:)), for: .touchUpInside)
 
         // 画笔设置
-        brushSettingView = SLBBrushSettingView(frame: CGRectMake(0, MyScreenHeight , MyScreenWith, 300))
+        brushSettingView = SLBBrushSettingView(frame: CGRect(x: 0, y: MyScreenHeight , width: MyScreenWith, height: 300))
         view.addSubview(brushSettingView)
-        brushSettingView.strokeWSlider.addTarget(self, action: #selector(SLBDrawDrawViewController.strokeWSliderClick(_:)), forControlEvents: .ValueChanged)
-        self.drawDrawV.undo.addTarget(self, action: #selector(SLBDrawDrawViewController.undoClick), forControlEvents: .TouchUpInside)
-        self.drawDrawV.redo.addTarget(self, action: #selector(SLBDrawDrawViewController.redoClick), forControlEvents: .TouchUpInside)
+        brushSettingView.strokeWSlider.addTarget(self, action: #selector(SLBDrawDrawViewController.strokeWSliderClick(_:)), for: .valueChanged)
+        self.drawDrawV.undo.addTarget(self, action: #selector(SLBDrawDrawViewController.undoClick), for: .touchUpInside)
+        self.drawDrawV.redo.addTarget(self, action: #selector(SLBDrawDrawViewController.redoClick), for: .touchUpInside)
 
         // 设置画笔的颜色
         brushSettingView.strokeColorChangedBlock = {
@@ -71,21 +71,21 @@ class SLBDrawDrawViewController: UIViewController, UIScrollViewDelegate {
             self.drawDrawV.paintViewTool.brush = SLBPencilBrush()
         }
         
-        brushSettingView.doneBtn.addTarget(self, action: #selector(SLBDrawDrawViewController.doneClick), forControlEvents: .TouchUpInside)
+        brushSettingView.doneBtn.addTarget(self, action: #selector(SLBDrawDrawViewController.doneClick), for: .touchUpInside)
         
         // 选择六个按钮的方法
         for indext in 0..<brushSettingView.addPreviewColor.btnArray.count{
             let btn = brushSettingView.addPreviewColor.btnArray[indext]
-            btn.addTarget(self, action: #selector(SLBDrawDrawViewController.btnClick(_:)), forControlEvents: .TouchUpInside)
+            btn.addTarget(self, action: #selector(SLBDrawDrawViewController.btnClick(_:)), for: .touchUpInside)
         }
     }
     
  
     //    MARK:- 全屏按钮
-    func allScreenBtnClick(sender: UIButton){
-        sender.selected = !sender.selected
-        if sender.selected { // 全屏显示
-            UIView.animateWithDuration(0.3, animations: { () -> Void in
+    func allScreenBtnClick(_ sender: UIButton){
+        sender.isSelected = !sender.isSelected
+        if sender.isSelected { // 全屏显示
+            UIView.animate(withDuration: 0.3, animations: { () -> Void in
                 self.drawDrawV.drawDrawTabbar.y = MyScreenHeight
                 self.drawDrawV.drawDrawNav.y = -self.drawDrawV.drawDrawNav.height
                 sender.y = sender.y + 60
@@ -93,7 +93,7 @@ class SLBDrawDrawViewController: UIViewController, UIScrollViewDelegate {
                 self.drawDrawV.redo.y =  self.drawDrawV.redo.y + 60
                 }, completion:nil)
         }else{   // 退出全屏
-            UIView.animateWithDuration(0.3, animations: { () -> Void in
+            UIView.animate(withDuration: 0.3, animations: { () -> Void in
                 self.drawDrawV.drawDrawTabbar.y = MyScreenHeight - 80
                 self.drawDrawV.drawDrawNav.y = 0
                 sender.y = sender.y - 60
@@ -123,7 +123,7 @@ class SLBDrawDrawViewController: UIViewController, UIScrollViewDelegate {
             self.drawDrawV.paintViewTool.clearDraw()
             self.drawDrawV.paintViewTool.alpha = 0.1
             self.drawDrawV.drawDrawScrollView.zoomScale = 0.1
-             UIView.animateWithDuration(0.5, animations: { () -> Void in
+             UIView.animate(withDuration: 0.5, animations: { () -> Void in
                 self.drawDrawV.drawDrawScrollView.zoomScale = 1
                 
                 self.drawDrawV.paintViewTool.alpha = 1
@@ -135,15 +135,15 @@ class SLBDrawDrawViewController: UIViewController, UIScrollViewDelegate {
     
     //    MARK:- 点击完成按钮
     func doneClick(){
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
-            self.brushSettingView.frame = CGRectMake(0, MyScreenHeight , MyScreenWith, 300)
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
+            self.brushSettingView.frame = CGRect(x: 0, y: MyScreenHeight , width: MyScreenWith, height: 300)
             }, completion: nil)
     }
     
     //    MARK:- 颜色按钮点击方法
-    func btnClick(sender: UIButton){
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
-            self.brushSettingView.frame = CGRectMake(0, MyScreenHeight , MyScreenWith, 300)
+    func btnClick(_ sender: UIButton){
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
+            self.brushSettingView.frame = CGRect(x: 0, y: MyScreenHeight , width: MyScreenWith, height: 300)
             }, completion: nil)
         drawDrawV.paintViewTool.brush = SLBPencilBrush()
         self.drawDrawV.paintViewTool.strokeColor = sender.backgroundColor!
@@ -152,75 +152,75 @@ class SLBDrawDrawViewController: UIViewController, UIScrollViewDelegate {
     }
     
     
-    func strokeWSliderClick(sender: UISlider){
+    func strokeWSliderClick(_ sender: UISlider){
         drawDrawV.paintViewTool.strokeWidth = CGFloat(sender.value)
         brushSettingView.drawBrushLowWH.text = String(format: "%.1f", sender.value)
     }
     
     func backButtonClick(){
-        navigationController?.popToRootViewControllerAnimated(true)
-    }
+        navigationController!.popToRootViewController(animated: true)
+     }
     
     //    MARK:- 保存按钮
     func saveBtnClick(){
         let oldImage = self.drawDrawV.paintViewTool.takeImage()
         UIGraphicsBeginImageContext(view.size)
-        oldImage.drawInRect(CGRectMake(0, 0, view.size.width, view.size.height))
+        oldImage.draw(in: CGRect(x: 0, y: 0, width: view.size.width, height: view.size.height))
         
         let newImge = imageBackGround
-        newImge?.drawInRect(CGRectMake(0, 0, view.size.width, view.size.height))
+        newImge?.draw(in: CGRect(x: 0, y: 0, width: view.size.width, height: view.size.height))
         
         let nn = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         UIImageWriteToSavedPhotosAlbum(nn!, self, #selector(SLBDrawDrawViewController.image(_:didFinishSavingWithError:contextInfo:)), nil)
     }
     
-    func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Float>) {
+    func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Float>) {
         if let err = error {
-            let alert = UIAlertController(title: NSLocalizedString("failStr", comment: ""), message: err.localizedDescription, preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("commitStr", comment: ""), style: .Cancel, handler: nil))
-            presentViewController(alert, animated: true, completion: nil)
+            let alert = UIAlertController(title: NSLocalizedString("failStr", comment: ""), message: err.localizedDescription, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("commitStr", comment: ""), style: .cancel, handler: nil))
+            present(alert, animated: true, completion: nil)
         } else {
             
             
-            let alert = UIAlertController(title: NSLocalizedString("tip", comment: ""), message: NSLocalizedString("saveSecusess", comment: ""), preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("commitStr", comment: ""), style: .Default, handler: nil))
-            presentViewController(alert, animated: true, completion: nil)
+            let alert = UIAlertController(title: NSLocalizedString("tip", comment: ""), message: NSLocalizedString("saveSecusess", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("commitStr", comment: ""), style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
         }
         
     }
     
     //    MARK:- 橡皮擦按钮
-    func eraserBtnClick(sender: UIButton){
+    func eraserBtnClick(_ sender: UIButton){
         drawDrawV.paintViewTool.brush = SLBEraserTool()
-        sender.enabled = false
-        drawDrawV.drawPencil.enabled = true
+        sender.isEnabled = false
+        drawDrawV.drawPencil.isEnabled = true
     }
-    func drawPencilBtnClick(sender: UIButton){
+    func drawPencilBtnClick(_ sender: UIButton){
         drawDrawV.paintViewTool.brush = SLBPencilBrush()
-        sender.enabled = false
-        drawDrawV.eraserBtn.enabled = true
+        sender.isEnabled = false
+        drawDrawV.eraserBtn.isEnabled = true
     }
     
     // MARK:- 画笔设置
     func drawSettingBtnClick(){
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
-            self.brushSettingView.frame = CGRectMake(0, MyScreenHeight - 300 , MyScreenWith, 300)
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
+            self.brushSettingView.frame = CGRect(x: 0, y: MyScreenHeight - 300 , width: MyScreenWith, height: 300)
             }, completion: nil)
         
     }
     
-    func scrollViewDidZoom(scrollView: UIScrollView) {
-        scrollView.scrollEnabled = false
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        scrollView.isScrollEnabled = false
         
         let offsetX = (scrollView.bounds.size.width > scrollView.contentSize.width) ? (scrollView.bounds.size.width - scrollView.contentSize.width)/2 : 0.0
         let offsetY = (scrollView.bounds.size.height > scrollView.contentSize.height) ? (scrollView.bounds.size.height - scrollView.contentSize.height)/2 : 0.0
-        drawDrawV.paintViewTool.center = CGPointMake(scrollView.contentSize.width/2 + offsetX,scrollView.contentSize.height/2 + offsetY);
+        drawDrawV.paintViewTool.center = CGPoint(x: scrollView.contentSize.width/2 + offsetX,y: scrollView.contentSize.height/2 + offsetY);
         
         
     }
     
-    func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return drawDrawV.paintViewTool
         
     }

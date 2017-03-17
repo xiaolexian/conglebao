@@ -116,6 +116,6 @@ public extension CGRect {
     }
 }
 
-public func CGRectMakeWithCenter(centerX: CGFloat, _ centerY: CGFloat, _ width: CGFloat, _ height: CGFloat) -> CGRect {
-    return CGRectMake(centerX - width / 2, centerY - height / 2, width, height)
+public func CGRectMakeWithCenter(_ centerX: CGFloat, _ centerY: CGFloat, _ width: CGFloat, _ height: CGFloat) -> CGRect {
+    return CGRect(x: centerX - width / 2, y: centerY - height / 2, width: width, height: height)
 }

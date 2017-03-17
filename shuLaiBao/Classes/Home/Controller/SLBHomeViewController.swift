@@ -12,23 +12,23 @@ class SLBHomeViewController: UIViewController, UIGestureRecognizerDelegate{
     var homeV:SLBHomeV!
      var btnCenterDic = [UIView : CGPoint]()
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         LDAudioPlayerTool.shareAudioPlayer.thePlayers.play()
         navigationController?.setNavigationBarHidden(true, animated: true)
         navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
-    override func viewDidDisappear(animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         LDAudioPlayerTool.shareAudioPlayer.thePlayers.pause()
 
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
 
         super.viewDidAppear(animated)
-        navigationController?.interactivePopGestureRecognizer?.enabled = false
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         print("首页显示完毕")
     }
     
@@ -43,10 +43,10 @@ class SLBHomeViewController: UIViewController, UIGestureRecognizerDelegate{
     func setupView() {
         homeV = SLBHomeV(frame: view.bounds)
         view.addSubview(homeV)
-        homeV.shuShu.addTarget(self, action: #selector(SLBHomeViewController.shushuClick), forControlEvents: .TouchUpInside)
-        homeV.drawDraw.addTarget(self, action: #selector(SLBHomeViewController.drawdrawClick), forControlEvents: .TouchUpInside)
-        homeV.setting.addTarget(self, action: #selector(SLBHomeViewController.settingClick), forControlEvents: .TouchUpInside)
-        homeV.countingBtn.addTarget(self, action: #selector(SLBHomeViewController.countingBtnClick), forControlEvents: .TouchUpInside)
+        homeV.shuShu.addTarget(self, action: #selector(SLBHomeViewController.shushuClick), for: .touchUpInside)
+        homeV.drawDraw.addTarget(self, action: #selector(SLBHomeViewController.drawdrawClick), for: .touchUpInside)
+        homeV.setting.addTarget(self, action: #selector(SLBHomeViewController.settingClick), for: .touchUpInside)
+        homeV.countingBtn.addTarget(self, action: #selector(SLBHomeViewController.countingBtnClick), for: .touchUpInside)
         imageAnimation("shuGuan_0", imageNumber: 8, RepeatCount: 0, imageViews: homeV.shuRenImage, duration: 0.15)
         imageAnimation("CaiDie_0", imageNumber: 10, RepeatCount: 0, imageViews: homeV.caiDie, duration: 0.1)
         imageAnimation("CaiDie_0", imageNumber: 10, RepeatCount: 0, imageViews: homeV.caiDieTwo, duration: 0.1)
@@ -60,16 +60,16 @@ class SLBHomeViewController: UIViewController, UIGestureRecognizerDelegate{
  
     
     // Mark: - 画一画/玩一玩/数一数/设置
-    func settingPan(sender: UIPanGestureRecognizer){
+    func settingPan(_ sender: UIPanGestureRecognizer){
          switch sender.state{
-        case .Began:
+        case .began:
               btnCenterDic[sender.view!] = sender.view!.center
-        case .Changed:
-            UIView.animateWithDuration(4, delay: 0, usingSpringWithDamping: 0.1, initialSpringVelocity: 1.0, options: .CurveLinear, animations: { () -> Void in
-                sender.view!.center = sender.locationInView(self.view)
+        case .changed:
+            UIView.animate(withDuration: 4, delay: 0, usingSpringWithDamping: 0.1, initialSpringVelocity: 1.0, options: .curveLinear, animations: { () -> Void in
+                sender.view!.center = sender.location(in: self.view)
                 }, completion: nil)
-          case .Ended:
-             UIView.animateWithDuration(5, delay: 0, usingSpringWithDamping: 0.1, initialSpringVelocity: 1.0, options: .CurveLinear, animations: { () -> Void in
+          case .ended:
+             UIView.animate(withDuration: 5, delay: 0, usingSpringWithDamping: 0.1, initialSpringVelocity: 1.0, options: .curveLinear, animations: { () -> Void in
                 sender.view!.center = self.btnCenterDic[sender.view!]!
             
                 }, completion: nil)
@@ -86,7 +86,7 @@ class SLBHomeViewController: UIViewController, UIGestureRecognizerDelegate{
     //    MARK:- 设置按钮点击
     func settingClick(){
         let settingAlert = SLBSettingAlertTool()
-        settingAlert.pingFenBtn.addTarget(self, action: #selector(SLBHomeViewController.pingFenBtnClick), forControlEvents: .TouchUpInside)
+        settingAlert.pingFenBtn.addTarget(self, action: #selector(SLBHomeViewController.pingFenBtnClick), for: .touchUpInside)
 
         settingAlert.frame = view.bounds
         view.addSubview(settingAlert)
@@ -99,8 +99,8 @@ class SLBHomeViewController: UIViewController, UIGestureRecognizerDelegate{
         view.addSubview(parentPFClickView)
         parentPFClickView.parentOnly = {isParent in
             if isParent == true{
-                 let openURL = NSURL(string: "http://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=1073796861&pageNumber=0&sortOrdering=2&type=Purple+Software&mt=8")
-                UIApplication.sharedApplication().openURL(openURL!)
+                 let openURL = URL(string: "http://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=1073796861&pageNumber=0&sortOrdering=2&type=Purple+Software&mt=8")
+                UIApplication.shared.openURL(openURL!)
             }
         }
     }
@@ -117,7 +117,7 @@ class SLBHomeViewController: UIViewController, UIGestureRecognizerDelegate{
     //    MARK:- 点击树怪
     func imagePathClick(){
          self.imageAnimation("ShuGuaiBeiDa_0", imageNumber: 9, RepeatCount: 1, imageViews: homeV.shuRenImage, duration: 0.15)
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,  Int64(8 * 0.15 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { () -> Void in
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(8 * 0.15 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)) { () -> Void in
             self.imageAnimation("shuGuan_0", imageNumber: 8, RepeatCount: 0, imageViews: self.homeV.shuRenImage, duration: 0.15)
         }
     }
@@ -130,7 +130,7 @@ class SLBHomeViewController: UIViewController, UIGestureRecognizerDelegate{
     }
     
     //    MARK:- 序列动画
-    func imageAnimation(imageName:String, imageNumber: Int, RepeatCount: Int, imageViews:UIImageView, duration: CGFloat){
+    func imageAnimation(_ imageName:String, imageNumber: Int, RepeatCount: Int, imageViews:UIImageView, duration: CGFloat){
          var imagArray = [UIImage]()
         for indext in 0..<imageNumber{
             let imageStr = String(format: "\(imageName)%d",indext)

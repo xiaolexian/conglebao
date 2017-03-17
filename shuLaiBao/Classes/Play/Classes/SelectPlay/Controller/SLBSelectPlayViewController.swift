@@ -26,15 +26,15 @@ class SLBSelectPlayViewController: UIViewController {
         selectPlayV.frame = view.bounds
         view.addSubview(selectPlayV)
         
-        selectPlayV.backBtn .addTarget(self, action: #selector(SLBSelectPlayViewController.backBtn), forControlEvents: .TouchUpInside)
-        selectPlayV.primaryBtn.addTarget(self, action: #selector(SLBSelectPlayViewController.primaryBtnClick), forControlEvents: .TouchUpInside)
-         selectPlayV.midBtn.addTarget(self, action: #selector(SLBSelectPlayViewController.midBtnClick), forControlEvents: .TouchUpInside)
-        selectPlayV.hightBtn.addTarget(self, action: #selector(SLBSelectPlayViewController.hightBtnClick), forControlEvents: .TouchUpInside)
+        selectPlayV.backBtn .addTarget(self, action: #selector(SLBSelectPlayViewController.backBtn), for: .touchUpInside)
+        selectPlayV.primaryBtn.addTarget(self, action: #selector(SLBSelectPlayViewController.primaryBtnClick), for: .touchUpInside)
+         selectPlayV.midBtn.addTarget(self, action: #selector(SLBSelectPlayViewController.midBtnClick), for: .touchUpInside)
+        selectPlayV.hightBtn.addTarget(self, action: #selector(SLBSelectPlayViewController.hightBtnClick), for: .touchUpInside)
 
     }
     
     func backBtn() {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController!.popViewController(animated: true)
     }
     
     // 初级按钮点击

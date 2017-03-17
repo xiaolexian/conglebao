@@ -10,11 +10,11 @@ import UIKit
 
 class SLBBarButttonItem: UIBarButtonItem {
 
-    static func bauttonItem(targets:AnyObject, actions:Selector, imageName:String,hightImaeName:String)->UIBarButtonItem{
+    static func bauttonItem(_ targets:AnyObject, actions:Selector, imageName:String,hightImaeName:String)->UIBarButtonItem{
         let btn = UIButton()
-        btn.addTarget(targets, action: actions, forControlEvents: .TouchUpInside)
-        btn.setBackgroundImage(UIImage(named: imageName), forState: .Normal)
-        btn.setBackgroundImage(UIImage(named: hightImaeName), forState: .Highlighted)
+        btn.addTarget(targets, action: actions, for: .touchUpInside)
+        btn.setBackgroundImage(UIImage(named: imageName), for: UIControlState())
+        btn.setBackgroundImage(UIImage(named: hightImaeName), for: .highlighted)
         btn.size = (btn.currentBackgroundImage?.size)!
         return UIBarButtonItem(customView: btn)
     }

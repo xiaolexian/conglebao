@@ -16,13 +16,13 @@ class SLBContactUsView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.whiteColor()
+        backgroundColor = UIColor.white
         
         // 方框背景View
         let bgView = UIView()
         
-        bgView.frame = CGRectMake(5, 64 + 20, myScreenSize.width - 10, 100)
-        bgView.layer.borderColor = UIColor.blackColor().CGColor
+        bgView.frame = CGRect(x: 5, y: 64 + 20, width: myScreenSize.width - 10, height: 100)
+        bgView.layer.borderColor = UIColor.black.cgColor
         bgView.layer.borderWidth = 0.5
         addSubview(bgView)
         
@@ -30,24 +30,24 @@ class SLBContactUsView: UIView {
         bgView.addSubview(UIView())
         
         // 内容TextView
-        contentTextView.frame = CGRectMake(0, 0, bgView.width - 20, bgView.height - 20)
-        contentTextView.font = UIFont.systemFontOfSize(14)
+        contentTextView.frame = CGRect(x: 0, y: 0, width: bgView.width - 20, height: bgView.height - 20)
+        contentTextView.font = UIFont.systemFont(ofSize: 14)
         bgView.addSubview(contentTextView)
         
         // 占位文字Label
-        placeholderLabel.frame = CGRectMake(5, 5, contentTextView.width, 20)
+        placeholderLabel.frame = CGRect(x: 5, y: 5, width: contentTextView.width, height: 20)
         placeholderLabel.text = "请输入产品意见,我们将不断优化体验"
-        placeholderLabel.font = UIFont.systemFontOfSize(14)
-        placeholderLabel.textColor = UIColor.lightGrayColor()
+        placeholderLabel.font = UIFont.systemFont(ofSize: 14)
+        placeholderLabel.textColor = UIColor.lightGray
         bgView.addSubview(placeholderLabel)
         
         // 字数Label
         let numberLabelW: CGFloat = 80
         let numberLabelH: CGFloat = 30
-        numberLabel.frame = CGRectMake(myScreenSize.width - numberLabelW, bgView.height - numberLabelH - 10, numberLabelW, numberLabelH);
+        numberLabel.frame = CGRect(x: myScreenSize.width - numberLabelW, y: bgView.height - numberLabelH - 10, width: numberLabelW, height: numberLabelH);
         numberLabel.text = "0/100";
-        numberLabel.textColor = UIColor.lightGrayColor()
-        numberLabel.textAlignment = .Center
+        numberLabel.textColor = UIColor.lightGray
+        numberLabel.textAlignment = .center
         bgView.addSubview(numberLabel)
     }
 

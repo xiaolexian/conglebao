@@ -12,10 +12,10 @@ struct Position {
     var col: Int
     var row: Int
 }
-func PositionMake(col: Int, _ row: Int) -> Position {
+func PositionMake(_ col: Int, _ row: Int) -> Position {
     return Position(col: col, row: row)
 }
-func PositionEqualToPosition(p1: Position, _ p2: Position) -> Bool {
+func PositionEqualToPosition(_ p1: Position, _ p2: Position) -> Bool {
     return p1.col == p2.col && p1.row == p2.row
 }
 
@@ -27,14 +27,14 @@ class SnakeBlock: UIView {
     
     convenience init(position: Position, size: CGSize) {
         self.init()
-        self.frame = CGRectMake(CGFloat(position.col) * size.width, CGFloat(position.row) * size.height, size.width, size.height)
+        self.frame = CGRect(x: CGFloat(position.col) * size.width, y: CGFloat(position.row) * size.height, width: size.width, height: size.height)
         self.size = size
         self.position = position
     }
     
     var position: Position = PositionMake(0, 0) {
         willSet {
-            self.frame = CGRectMake(CGFloat(newValue.col) * self.width, CGFloat(newValue.row) * self.height, self.width, self.height);
+            self.frame = CGRect(x: CGFloat(newValue.col) * self.width, y: CGFloat(newValue.row) * self.height, width: self.width, height: self.height);
         }
     }
     

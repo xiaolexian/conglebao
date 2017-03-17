@@ -14,7 +14,7 @@ class BonusBlock: SnakeBlock {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        centerView.frame = CGRectMake(0, 0, frame.width, frame.height)
+        centerView.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
         centerView.image = UIImage.init(named: "bonus")
         addSubview(centerView)
     }
@@ -22,7 +22,7 @@ class BonusBlock: SnakeBlock {
     
     override var frame: CGRect {
         didSet {
-            centerView.frame = CGRectMake(0, 0, frame.width, frame.height)
+            centerView.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
         }
     }
     

@@ -10,17 +10,17 @@ import UIKit
 
 class BodyBlock: SnakeBlock {
     let centerView = UIImageView()
-    var direction: Direction = Direction.Right {
+    var direction: Direction = Direction.right {
         willSet {
             switch newValue {
-            case Direction.Up:
-                centerView.image = UIImage.init(CGImage: centerView.image!.CGImage!, scale: 1, orientation: UIImageOrientation.Left)
-            case Direction.Down:
-                centerView.image = UIImage.init(CGImage: centerView.image!.CGImage!, scale: 1, orientation: UIImageOrientation.Right)
-            case Direction.Left:
-                centerView.image = UIImage.init(CGImage: centerView.image!.CGImage!, scale: 1, orientation: UIImageOrientation.Down)
-            case Direction.Right:
-                centerView.image = UIImage.init(CGImage: centerView.image!.CGImage!, scale: 1, orientation: UIImageOrientation.Up)
+            case Direction.up:
+                centerView.image = UIImage.init(cgImage: centerView.image!.cgImage!, scale: 1, orientation: UIImageOrientation.left)
+            case Direction.down:
+                centerView.image = UIImage.init(cgImage: centerView.image!.cgImage!, scale: 1, orientation: UIImageOrientation.right)
+            case Direction.left:
+                centerView.image = UIImage.init(cgImage: centerView.image!.cgImage!, scale: 1, orientation: UIImageOrientation.down)
+            case Direction.right:
+                centerView.image = UIImage.init(cgImage: centerView.image!.cgImage!, scale: 1, orientation: UIImageOrientation.up)
             }
         }
     }

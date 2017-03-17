@@ -10,7 +10,7 @@
 import UIKit
 
 class SLBBrushSettingView: UIImageView {
-    var strokeColorChangedBlock: ((strokeColor: UIColor) -> Void)?
+    var strokeColorChangedBlock: ((_ strokeColor: UIColor) -> Void)?
     
     var drawBrushMaxWH:UILabel!
     var drawBrushWH:UILabel!
@@ -25,19 +25,19 @@ class SLBBrushSettingView: UIImageView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        userInteractionEnabled = true
-        backgroundColor = UIColor.whiteColor()
+        isUserInteractionEnabled = true
+        backgroundColor = UIColor.white
         
         // 画笔
-        drawBrushWH = UILabel(frame: CGRectMake(10 , 10 , 100 , 20))
-        drawBrushWH.font = UIFont.systemFontOfSize(12)
+        drawBrushWH = UILabel(frame: CGRect(x: 10 , y: 10 , width: 100 , height: 20))
+        drawBrushWH.font = UIFont.systemFont(ofSize: 12)
         drawBrushWH.text = NSLocalizedString("brushSettings", comment: "")
         addSubview(drawBrushWH)
         
         // 画笔
-        drawBrushLowWH = UILabel(frame: CGRectMake(10 , drawBrushWH.frame.maxY + 10 , 30 , 20))
-        drawBrushLowWH.font = UIFont.systemFontOfSize(12)
-        drawBrushLowWH.textAlignment =  .Center
+        drawBrushLowWH = UILabel(frame: CGRect(x: 10 , y: drawBrushWH.frame.maxY + 10 , width: 30 , height: 20))
+        drawBrushLowWH.font = UIFont.systemFont(ofSize: 12)
+        drawBrushLowWH.textAlignment =  .center
         drawBrushLowWH.text = "10.0"
         addSubview(drawBrushLowWH)
         
@@ -50,47 +50,47 @@ class SLBBrushSettingView: UIImageView {
         addSubview(strokeWSlider)
         
         // 画笔最大数
-        drawBrushMaxWH = UILabel(frame: CGRectMake(MyScreenWith - 30 , drawBrushLowWH.y , 30 , 20))
-        drawBrushMaxWH.font = UIFont.systemFontOfSize(12)
-        drawBrushMaxWH.textAlignment =  .Center
+        drawBrushMaxWH = UILabel(frame: CGRect(x: MyScreenWith - 30 , y: drawBrushLowWH.y , width: 30 , height: 20))
+        drawBrushMaxWH.font = UIFont.systemFont(ofSize: 12)
+        drawBrushMaxWH.textAlignment =  .center
         drawBrushMaxWH.text = "30.0"
         addSubview(drawBrushMaxWH)
         
         // 自定义颜色文本
-        customColorStrLabel = UILabel(frame: CGRectMake(10 , drawBrushLowWH.maxY + 10 , 60 , 20))
-        customColorStrLabel.font = UIFont.systemFontOfSize(12)
+        customColorStrLabel = UILabel(frame: CGRect(x: 10 , y: drawBrushLowWH.maxY + 10 , width: 60 , height: 20))
+        customColorStrLabel.font = UIFont.systemFont(ofSize: 12)
         customColorStrLabel.text = NSLocalizedString("customColorStr", comment: "")
         addSubview(customColorStrLabel)
         
         // 预览View
-        previewColorView = UIView(frame: CGRectMake(customColorStrLabel.maxX + 10, customColorStrLabel.y , MyScreenWith - 60 - customColorStrLabel.width, customColorStrLabel.height))
-        previewColorView.backgroundColor = UIColor.blackColor()
-        previewColorView.layer.borderColor = UIColor.blackColor().CGColor
+        previewColorView = UIView(frame: CGRect(x: customColorStrLabel.maxX + 10, y: customColorStrLabel.y , width: MyScreenWith - 60 - customColorStrLabel.width, height: customColorStrLabel.height))
+        previewColorView.backgroundColor = UIColor.black
+        previewColorView.layer.borderColor = UIColor.black.cgColor
         previewColorView.layer.borderWidth = 1
         addSubview(previewColorView)
         
         //滑竿的背景
-        backgroundPicker = SLBCustomPickerTool(frame: CGRectMake(10, previewColorView.maxY + 10, MyScreenWith - 20, 120))
+        backgroundPicker = SLBCustomPickerTool(frame: CGRect(x: 10, y: previewColorView.maxY + 10, width: MyScreenWith - 20, height: 120))
         addSubview(backgroundPicker)
         
         // 完成按钮
-        doneBtn = UIButton(frame: CGRectMake(MyScreenWith - 60, drawBrushWH.y, 50, 20))
-        doneBtn.setTitle(NSLocalizedString("okStr", comment: ""), forState: .Normal)
-        doneBtn.titleLabel?.font = UIFont.boldSystemFontOfSize(13)
-        doneBtn.titleLabel?.shadowOffset = CGSizeMake(0.5, 1.0)
-        doneBtn.setTitleShadowColor(UIColor.blackColor(), forState: .Normal)
-         doneBtn.setBackgroundImage(UIImage(named: "commitBtn_icon"), forState: .Normal)
+        doneBtn = UIButton(frame: CGRect(x: MyScreenWith - 60, y: drawBrushWH.y, width: 50, height: 20))
+        doneBtn.setTitle(NSLocalizedString("okStr", comment: ""), for: UIControlState())
+        doneBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 13)
+        doneBtn.titleLabel?.shadowOffset = CGSize(width: 0.5, height: 1.0)
+        doneBtn.setTitleShadowColor(UIColor.black, for: UIControlState())
+         doneBtn.setBackgroundImage(UIImage(named: "commitBtn_icon"), for: UIControlState())
         addSubview(doneBtn)
          
         // 预设颜色
-        addPreviewColor = SLBAddPreviewColorTool(frame: CGRectMake(0 , backgroundPicker.maxY + 10, MyScreenWith, 50))
+        addPreviewColor = SLBAddPreviewColorTool(frame: CGRect(x: 0 , y: backgroundPicker.maxY + 10, width: MyScreenWith, height: 50))
         addSubview(addPreviewColor)
         
         backgroundPicker.colorChangeBlock = {
             (color: UIColor) in
             self.previewColorView.backgroundColor = color
             if let strokeColorChangedBlock = self.strokeColorChangedBlock {
-                strokeColorChangedBlock(strokeColor: color)
+                strokeColorChangedBlock(color)
             }
         }
         

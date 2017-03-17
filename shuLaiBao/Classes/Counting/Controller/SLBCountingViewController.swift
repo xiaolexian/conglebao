@@ -25,9 +25,9 @@ class SLBCountingViewController: UIViewController,SLBCountingDelegate {
         basketCurrentCoutn = 0
         countingV = SLBCountingView(frame: view.bounds)
         view.addSubview(countingV)
-        countingV.backButton.addTarget(self, action: #selector(SLBCountingViewController.backButtonClick), forControlEvents: .TouchUpInside)
+        countingV.backButton.addTarget(self, action: #selector(SLBCountingViewController.backButtonClick), for: .touchUpInside)
         imageAnimation("redFox_0", imageNumber: 8, RepeatCount: 0, imageViews: countingV.redFoxImage, duration: 0.2)
-        countingV.commitButton.addTarget(self, action: #selector(SLBCountingViewController.commitClick), forControlEvents: .TouchUpInside)
+        countingV.commitButton.addTarget(self, action: #selector(SLBCountingViewController.commitClick), for: .touchUpInside)
         for name in countingV.grapeBtnArray {
             name.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(SLBCountingViewController.grapeImagePan(_:))))
         }
@@ -51,25 +51,25 @@ class SLBCountingViewController: UIViewController,SLBCountingDelegate {
     
     // MARK:- 退出按钮
     func backButtonClick(){
-        navigationController?.popViewControllerAnimated(true)
+        navigationController!.popViewController(animated: true)
     }
     
     // MARK:- 葡萄拖动事件
-    func grapeImagePan(sender: UIPanGestureRecognizer){
+    func grapeImagePan(_ sender: UIPanGestureRecognizer){
         
         // 判断是否葡萄放进篮子里面
-        let isContainsPoint:Bool = CGRectContainsPoint(countingV.basket.frame, (sender.view?.center)!)
+        let isContainsPoint:Bool = countingV.basket.frame.contains((sender.view?.center)!)
         
         switch sender.state{
-        case .Began:
+        case .began:
             btnCenterDic[sender.view!] = sender.view!.center
-        case .Changed:
-            sender.view!.center = sender.locationInView(self.view)
-            countingV.lightBasket.hidden = !isContainsPoint
-        case .Ended:
+        case .changed:
+            sender.view!.center = sender.location(in: self.view)
+            countingV.lightBasket.isHidden = !isContainsPoint
+        case .ended:
             
             // 高亮的篮子隐藏
-            countingV.lightBasket.hidden = true
+            countingV.lightBasket.isHidden = true
             
             if isContainsPoint{
                 
@@ -81,7 +81,7 @@ class SLBCountingViewController: UIViewController,SLBCountingDelegate {
                 
             }else{  // 如果没有葡萄就返回
                 
-                UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.1, initialSpringVelocity: 0.1, options: .CurveLinear, animations: { () -> Void in
+                UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.1, initialSpringVelocity: 0.1, options: .curveLinear, animations: { () -> Void in
                     sender.view!.center = self.btnCenterDic[sender.view!]!
                     }, completion: nil)
             }
@@ -105,12 +105,12 @@ class SLBCountingViewController: UIViewController,SLBCountingDelegate {
         
         // 改变确定按钮的数字
         let commitStr = NSLocalizedString("commitStr", comment: "")
-        countingV.commitButton.setTitle("(\(basketCurrentCoutn))\(commitStr)", forState: .Normal)
+        countingV.commitButton.setTitle("(\(basketCurrentCoutn))\(commitStr)", for: UIControlState())
         
     }
     
     //    MARK:- 序列动画
-    func imageAnimation(imageName:String, imageNumber: Int, RepeatCount: Int, imageViews:UIImageView, duration: CGFloat){
+    func imageAnimation(_ imageName:String, imageNumber: Int, RepeatCount: Int, imageViews:UIImageView, duration: CGFloat){
         var imagArray = [UIImage]()
         for indext in 0..<imageNumber{
             let imageStr = String(format: "\(imageName)%d",indext)

@@ -15,10 +15,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var nav:UINavigationController!
     var window: UIWindow?
     
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
           
         // 隐藏状态栏
-        UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
+        UIApplication.shared.setStatusBarHidden(true, with: .fade)
         
         //创建窗口
         window = UIWindow(frame: MyScreen)
@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let mainVC = SLBHomeViewController()
         nav = SLBNavViewController(rootViewController: mainVC)
         self.window?.rootViewController = nav
-        NSThread.sleepForTimeInterval(1.5)
+        Thread.sleep(forTimeInterval: 1.5)
         //显示窗口
         window?.makeKeyAndVisible()
         
@@ -37,28 +37,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func applicationWillResignActive(application: UIApplication) {
+    func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-        if (nav.viewControllers.count > 1 && nav.viewControllers[1].isKindOfClass(SnakeViewController)){
+        if (nav.viewControllers.count > 1 && nav.viewControllers[1].isKind(of: SnakeViewController.self)){
             let vc = nav.viewControllers[1] as! SnakeViewController
             vc.gameStop()
         }
         
     }
     
-    func applicationDidEnterBackground(application: UIApplication) {
+    func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
     
-    func applicationWillEnterForeground(application: UIApplication) {
+    func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     }
     
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        if (nav.viewControllers.count > 1 &&  nav.viewControllers[1].isKindOfClass(SnakeViewController)){
+        if (nav.viewControllers.count > 1 &&  nav.viewControllers[1].isKind(of: SnakeViewController.self)){
             let vc = nav.viewControllers[1] as! SnakeViewController
             if (vc.isGameStar == true) {
                 vc.gameContinue()
@@ -66,7 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func applicationWillTerminate(application: UIApplication) {
+    func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
     
@@ -82,16 +82,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var launchImage = ""
         
         // 3. 获取系统所支持的启动图数组
-        let getLaunchImagesArray = NSBundle.mainBundle().objectForInfoDictionaryKey("UILaunchImages")!
+        let getLaunchImagesArray = Bundle.main.object(forInfoDictionaryKey: "UILaunchImages")!
         
         // 4. 遍历启动图数组
-        for launchImageDic in getLaunchImagesArray as! [[NSObject: AnyObject]]{
+        for launchImageDic in getLaunchImagesArray as! [[AnyHashable: Any]]{
             
             // 4.1 从遍历出的字典中得到图片的尺寸
             let launchImageSize = CGSizeFromString(launchImageDic["UILaunchImageSize"] as! String)
             
             // 4.2 判断如果遍历出的szie和设备size相同并且设备的朝向相同的话,就从字典里面取出启动图片的名称
-            if (CGSizeEqualToSize(launchImageSize, getWindowSize!) && deviceOrientation == launchImageDic["UILaunchImageOrientation"] as! String){
+            if (launchImageSize.equalTo(getWindowSize!) && deviceOrientation == launchImageDic["UILaunchImageOrientation"] as! String){
                 launchImage = launchImageDic["UILaunchImageName"] as! String
             }
         }
@@ -103,13 +103,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         newLaunchView.frame = (window?.bounds)!
         
         // 5.2 设置新建ImageView的内容显示模式
-        newLaunchView.contentMode = .ScaleAspectFill
+        newLaunchView.contentMode = .scaleAspectFill
         
         // 5.3 将新建ImageView添加到window上
         window?.addSubview(newLaunchView)
         
         // 6. 添加ImageView消失动画,并在动画结束完之后销毁掉ImageView
-        UIView.animateWithDuration(0.7, delay: 0.0, options: .BeginFromCurrentState, animations: { () -> Void in
+        UIView.animate(withDuration: 0.7, delay: 0.0, options: .beginFromCurrentState, animations: { () -> Void in
             newLaunchView.alpha = 0
             newLaunchView.layer.transform = CATransform3DScale(CATransform3DIdentity, 1.8, 1.8, 1)
             }) { (Bool) -> Void in

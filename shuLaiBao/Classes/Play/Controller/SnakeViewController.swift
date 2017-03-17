@@ -7,12 +7,36 @@
 //
 
 import UIKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 enum Direction: Int {
-    case Up = -1    // -1 << 0
-    case Down = 1   //  1 << 0
-    case Left = -2  // -1 << 1
-    case Right = 2  //  1 << 1
+    case up = -1    // -1 << 0
+    case down = 1   //  1 << 0
+    case left = -2  // -1 << 1
+    case right = 2  //  1 << 1
 }
 
 class SnakeViewController: UIViewController, UIGestureRecognizerDelegate, MyPopViewDelegate, SnakeAlertViewDelegate, SLBPauseAlertViewDelegate {
@@ -39,10 +63,10 @@ class SnakeViewController: UIViewController, UIGestureRecognizerDelegate, MyPopV
     var rowNum: Int!                            // 最大行数
     var timeInterval: Double!                   // 每帧时间间隔
     var blockSize: CGSize!
-    var timer: NSTimer?
+    var timer: Timer?
     var snakeBlockArr: Array<SnakeBlock>!
     var isGameStar:Bool!
-    private var direction: Direction! {
+    fileprivate var direction: Direction! {
         willSet {
             if snakeBlockArr.count != 0 {
                 let headBlock: HeadBlock = (snakeBlockArr.last as? HeadBlock)!
@@ -54,27 +78,27 @@ class SnakeViewController: UIViewController, UIGestureRecognizerDelegate, MyPopV
     var resultNum: Int!                         // 题目答案
     var allQuestionCount: Int! {                // 题目总数量
         willSet {
-            allQuestionCountLabel.text = "题目总数量：\(newValue)"
+            allQuestionCountLabel.text = "题目总数量：\(newValue!)"
         }
     }
     var residualQuestionCount: Int! {           // 剩余题目数量
         willSet {
-            residualQuestionCountLabel.text = "\(newValue)"
+            residualQuestionCountLabel.text = "\(newValue!)"
         }
     }
     var rightQuestionCount: Int! {              // 已答对题目数量
         willSet {
-            rightQuestionCountLabel.text = "\(newValue)"
+            rightQuestionCountLabel.text = "\(newValue!)"
         }
     }
     var wrongQuestionCount: Int! {              // 已答错题目数量
         willSet {
-            wrongQuestionCountLabel.text = "已答错：\(newValue)"
+            wrongQuestionCountLabel.text = "已答错：\(newValue!)"
         }
     }
     var failQuestionCount: Int! {               // 已失败题目数量
         willSet {
-            failQuestionCountLabel.text = "已失败：\(newValue)"
+            failQuestionCountLabel.text = "已失败：\(newValue!)"
         }
     }
     
@@ -99,7 +123,7 @@ class SnakeViewController: UIViewController, UIGestureRecognizerDelegate, MyPopV
         
         // 暂停按钮Button
         pauseButton = snakeView.pauseButton
-        pauseButton.addTarget(self, action: #selector(SnakeViewController.pauseButtonClick(_:)), forControlEvents: .TouchUpInside)
+        pauseButton.addTarget(self, action: #selector(SnakeViewController.pauseButtonClick(_:)), for: .touchUpInside)
         
         // 题目总数量Label
         allQuestionCountLabel = snakeView.allQuestionCountLabel
@@ -121,7 +145,7 @@ class SnakeViewController: UIViewController, UIGestureRecognizerDelegate, MyPopV
         
         // 获取题目按钮Button
         getQuestionButton = snakeView.getQuestionButton
-        getQuestionButton.addTarget(self, action: #selector(SnakeViewController.getQuestionButotnClick), forControlEvents: .TouchUpInside)
+        getQuestionButton.addTarget(self, action: #selector(SnakeViewController.getQuestionButotnClick), for: .touchUpInside)
         
         // 青蛙动画
         imageAnimation("qingWa_0", imageNumber: 6, RepeatCount: 0, imageViews: qingWaIcon, duration: 0.15)
@@ -131,7 +155,7 @@ class SnakeViewController: UIViewController, UIGestureRecognizerDelegate, MyPopV
         let bgViewGesture = UITapGestureRecognizer()
         bgViewGesture.delegate = self
         bgView.addGestureRecognizer(bgViewGesture)
-        bgView.userInteractionEnabled = false
+        bgView.isUserInteractionEnabled = false
         
         // 题目Label
         questionLabel = snakeView.questionLabel
@@ -141,8 +165,8 @@ class SnakeViewController: UIViewController, UIGestureRecognizerDelegate, MyPopV
         
         // 确定按钮Button
         answerButton = snakeView.answerButton
-        answerButton.hidden = true
-        answerButton.addTarget(self, action: #selector(SnakeViewController.answerButtonClick), forControlEvents: .TouchUpInside)
+        answerButton.isHidden = true
+        answerButton.addTarget(self, action: #selector(SnakeViewController.answerButtonClick), for: .touchUpInside)
     }
     
     // MARK: - 初始化数据
@@ -150,7 +174,7 @@ class SnakeViewController: UIViewController, UIGestureRecognizerDelegate, MyPopV
         colNum = 10
         rowNum = 10
         let blockWH = bgView.width / CGFloat(colNum)
-        blockSize = CGSizeMake(blockWH, blockWH)
+        blockSize = CGSize(width: blockWH, height: blockWH)
         
         if isPrimaryBtnClick == true{
             print("初级")
@@ -173,7 +197,7 @@ class SnakeViewController: UIViewController, UIGestureRecognizerDelegate, MyPopV
     
     // MARK: - 按钮点击事件
     // 暂停按钮点击
-    func pauseButtonClick(sender: UIButton) {
+    func pauseButtonClick(_ sender: UIButton) {
         let pausePopView = SLBPauseAlertView()
         pausePopView.frame = view.bounds
         pausePopView.delegate = self
@@ -181,7 +205,7 @@ class SnakeViewController: UIViewController, UIGestureRecognizerDelegate, MyPopV
         pausePopView.questionsLabel.text = questionString
         
         
-        if getQuestionButton.enabled  {
+        if getQuestionButton.isEnabled  {
             print("f" )
         }else{
             print("g")
@@ -196,7 +220,7 @@ class SnakeViewController: UIViewController, UIGestureRecognizerDelegate, MyPopV
         
         
         if button.tag == 10{// 继续按钮
-            if getQuestionButton.enabled  {
+            if getQuestionButton.isEnabled  {
                 print("f" )
             }else{
                 print("g")
@@ -205,7 +229,7 @@ class SnakeViewController: UIViewController, UIGestureRecognizerDelegate, MyPopV
 
             }
          }else if button.tag == 20{// 放弃按钮
-            navigationController?.popViewControllerAnimated(true)
+            navigationController!.popViewController(animated: true)
         }
         
     }
@@ -229,7 +253,7 @@ class SnakeViewController: UIViewController, UIGestureRecognizerDelegate, MyPopV
 
          view.addSubview(popView)
         popView.delegate = self
-        getQuestionButton.enabled = false
+        getQuestionButton.isEnabled = false
         getQuestionButton.layer.removeAllAnimations()
         
     }
@@ -263,8 +287,8 @@ class SnakeViewController: UIViewController, UIGestureRecognizerDelegate, MyPopV
     
     // MARK: - 游戏开始
     func gameStart() {
-        bgView.userInteractionEnabled = true
-        answerButton.hidden = false
+        bgView.isUserInteractionEnabled = true
+        answerButton.isHidden = false
         isGameStar = true
 
         // 清空数据和计时器
@@ -282,16 +306,16 @@ class SnakeViewController: UIViewController, UIGestureRecognizerDelegate, MyPopV
          bgView.addSubview(firstBlock)
          snakeBlockArr.append(firstBlock)
          addNewRandomBlock()
-        direction = Direction.Right
+        direction = Direction.right
         
         // 加入计时器
-        timer = NSTimer(timeInterval: timeInterval, target: self, selector: #selector(SnakeViewController.everyFrameAction), userInfo: nil, repeats: true)
-        NSRunLoop.currentRunLoop().addTimer(timer!, forMode: NSRunLoopCommonModes)
+        timer = Timer(timeInterval: timeInterval, target: self, selector: #selector(SnakeViewController.everyFrameAction), userInfo: nil, repeats: true)
+        RunLoop.current.add(timer!, forMode: RunLoopMode.commonModes)
     }
     
     // MARK: - 每帧事件
     func everyFrameAction() {
-        bgView.userInteractionEnabled = true
+        bgView.isUserInteractionEnabled = true
         let headBlock = snakeBlockArr.last!
         let tailBlock = snakeBlockArr[0]
         let newPosition = PositionMake(headBlock.position.col + (direction.rawValue & -1) / 2, (headBlock.position.row) + (direction.rawValue & -1) % 2)
@@ -307,22 +331,22 @@ class SnakeViewController: UIViewController, UIGestureRecognizerDelegate, MyPopV
             newBodyBlock.direction = headBodyBlock.direction
             bgView.addSubview(newBodyBlock)
             headBlock.position = newPosition
-            snakeBlockArr.insert(newBodyBlock, atIndex: snakeBlockArr.count - 1)
+            snakeBlockArr.insert(newBodyBlock, at: snakeBlockArr.count - 1)
             addNewRandomBlock()
             
             // 弹出当前数字
             let sumNumLabel = UILabel()
             sumNumLabel.frame = bgView.frame
             sumNumLabel.text = "\(snakeBlockArr.count - 1)"
-            sumNumLabel.font = UIFont.boldSystemFontOfSize(100)
-            sumNumLabel.textColor = UIColor.whiteColor()
-            sumNumLabel.shadowColor = UIColor.blackColor()
-            sumNumLabel.shadowOffset = CGSizeMake(1.0, 1.0)
-            sumNumLabel.textAlignment = .Center
-            sumNumLabel.transform = CGAffineTransformMakeScale(0.1, 0.1)
+            sumNumLabel.font = UIFont.boldSystemFont(ofSize: 100)
+            sumNumLabel.textColor = UIColor.white
+            sumNumLabel.shadowColor = UIColor.black
+            sumNumLabel.shadowOffset = CGSize(width: 1.0, height: 1.0)
+            sumNumLabel.textAlignment = .center
+            sumNumLabel.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
             view.addSubview(sumNumLabel)
-            UIView.animateWithDuration(0.5, animations: { () -> Void in
-                sumNumLabel.transform = CGAffineTransformMakeScale(1, 1)
+            UIView.animate(withDuration: 0.5, animations: { () -> Void in
+                sumNumLabel.transform = CGAffineTransform(scaleX: 1, y: 1)
                 }, completion: { (Bool) -> Void in
                     sumNumLabel.removeFromSuperview()
             })
@@ -336,8 +360,8 @@ class SnakeViewController: UIViewController, UIGestureRecognizerDelegate, MyPopV
             if snakeBlockArr.count > 1 {
                 let tailBodyBlock = tailBlock as! BodyBlock
                 tailBodyBlock.direction = headBodyBlock.direction
-                snakeBlockArr.removeAtIndex(0)
-                snakeBlockArr.insert(tailBlock, atIndex: snakeBlockArr.count - 1)
+                snakeBlockArr.remove(at: 0)
+                snakeBlockArr.insert(tailBlock, at: snakeBlockArr.count - 1)
             }
         }
     }
@@ -367,12 +391,12 @@ class SnakeViewController: UIViewController, UIGestureRecognizerDelegate, MyPopV
     }
     
     // MARK: - 判断是否撞墙
-    func isReachWall(position: Position) -> Bool {
+    func isReachWall(_ position: Position) -> Bool {
         return position.col < 0 || position.col >= colNum || position.row < 0 || position.row >= rowNum;
     }
     
     // MARK: - 判断是否撞自己
-    func isReachSelf(position: Position) -> Bool {
+    func isReachSelf(_ position: Position) -> Bool {
         for snakeBlock in snakeBlockArr {
             if PositionEqualToPosition(snakeBlock.position, position) {
                 return true
@@ -399,16 +423,16 @@ class SnakeViewController: UIViewController, UIGestureRecognizerDelegate, MyPopV
     
     func gameStop() {
         timer?.invalidate()
-        bgView.userInteractionEnabled = false
+        bgView.isUserInteractionEnabled = false
      }
     
     // MARK: - 继续
     func gameContinue() {
          // 加入计时器
-        timer = NSTimer(timeInterval: timeInterval, target: self, selector: #selector(SnakeViewController.everyFrameAction), userInfo: nil, repeats: true)
-        NSRunLoop.currentRunLoop().addTimer(timer!, forMode: NSRunLoopCommonModes)
+        timer = Timer(timeInterval: timeInterval, target: self, selector: #selector(SnakeViewController.everyFrameAction), userInfo: nil, repeats: true)
+        RunLoop.current.add(timer!, forMode: RunLoopMode.commonModes)
         
-        bgView.userInteractionEnabled = true
+        bgView.isUserInteractionEnabled = true
     }
     
     // MARK: - 胜利
@@ -429,32 +453,32 @@ class SnakeViewController: UIViewController, UIGestureRecognizerDelegate, MyPopV
     // MARK: - 返回
     func back() {
         print("返回")
-        navigationController?.popViewControllerAnimated(true)
+        navigationController!.popViewController(animated: true)
     }
     
     // MARK: - UIGestureRecognizer的代理方法
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
-        let touchPoint = touch.locationInView(gestureRecognizer.view)
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        let touchPoint = touch.location(in: gestureRecognizer.view)
         let headBlock = snakeBlockArr.last
-        if direction == Direction.Up || direction == Direction.Down {
+        if direction == Direction.up || direction == Direction.down {
             if touchPoint.x < headBlock?.x {
-                direction = Direction.Left
+                direction = Direction.left
             } else if touchPoint.x > headBlock?.maxX {
-                direction = Direction.Right
+                direction = Direction.right
             }
         } else {
             if touchPoint.y < headBlock?.y {
-                direction = Direction.Up
+                direction = Direction.up
             } else if touchPoint.y > headBlock?.maxY {
-                direction = Direction.Down
+                direction = Direction.down
             }
         }
-        bgView.userInteractionEnabled = false
+        bgView.isUserInteractionEnabled = false
         return true
     }
     
     // MARK: - MyPopView的代理方法
-    func myPopView(popview: MyPopView, contentText: String, resultNum: Int) {
+    func myPopView(_ popview: MyPopView, contentText: String, resultNum: Int) {
         gameStart()
  
         questionString = "\(contentText)"
@@ -462,39 +486,39 @@ class SnakeViewController: UIViewController, UIGestureRecognizerDelegate, MyPopV
     }
     
     // MARK: - SnakeAlertView的代理方法
-    func snakeAlertView(alertView: SnakeAlertView, didClickOkButton button: UIButton) {
+    func snakeAlertView(_ alertView: SnakeAlertView, didClickOkButton button: UIButton) {
         getQuestionButotnClick()
         
     }
     
-    func snakeAlertView(alertView: SnakeAlertView, didClickRestartButton button: UIButton) {
+    func snakeAlertView(_ alertView: SnakeAlertView, didClickRestartButton button: UIButton) {
         residualQuestionCount = allQuestionCount
         rightQuestionCount = 0
         wrongQuestionCount = 0
         failQuestionCount = 0
         
-        getQuestionButton.enabled = true
-        answerButton.hidden = true
+        getQuestionButton.isEnabled = true
+        answerButton.isHidden = true
         self.isGameStar = false
     
         // 添加动画
         let animation = CABasicAnimation(keyPath: "transform.scale")
-        getQuestionButton.layer.anchorPoint = CGPointMake(0.5, 0.5)
+        getQuestionButton.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         animation.autoreverses = true
         animation.fromValue = 1.0
         animation.repeatCount = 10000000
         animation.toValue = 1.1
         animation.duration = 1.0
-        getQuestionButton.layer.addAnimation(animation, forKey: "scale")
+        getQuestionButton.layer.add(animation, forKey: "scale")
         
     }
     
-    func snakeAlertView(alertView: SnakeAlertView, didClickBackButton button: UIButton) {
+    func snakeAlertView(_ alertView: SnakeAlertView, didClickBackButton button: UIButton) {
         back()
     }
     
     //    MARK:- 序列动画
-    func imageAnimation(imageName:String, imageNumber: Int, RepeatCount: Int, imageViews:UIImageView, duration: CGFloat){
+    func imageAnimation(_ imageName:String, imageNumber: Int, RepeatCount: Int, imageViews:UIImageView, duration: CGFloat){
         
         var imagArray = [UIImage]()
         for indext in 0..<imageNumber{

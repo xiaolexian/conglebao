@@ -9,14 +9,14 @@
 import UIKit
 
 @objc protocol SLBCountingDelegate{
-    optional func sLBCountingAlerViewClick()
+    @objc optional func sLBCountingAlerViewClick()
 }
 
 class SLBCountingAlertViewTool: UIView {
     var delegate:SLBCountingDelegate?
     var nextBut:UIButton!
 
-    private let bgView = UIImageView()
+    fileprivate let bgView = UIImageView()
     var tipLabel:UILabel!
     var tryAgain:UIButton!
     
@@ -27,44 +27,44 @@ class SLBCountingAlertViewTool: UIView {
         
         // 背景View
         bgView.frame = CGRectMakeWithCenter(myScreenSize.width / 2, myScreenSize.height / 2, myScreenSize.width - 50, 200)
-        bgView.userInteractionEnabled = true
+        bgView.isUserInteractionEnabled = true
         bgView.image = UIImage(named: "playAlert_BG")
         bgView.layer.cornerRadius = 10
         bgView.layer.masksToBounds = true
         bgView.layer.borderWidth = 2
-        bgView.layer.borderColor = UIColor.greenColor().CGColor
+        bgView.layer.borderColor = UIColor.green.cgColor
         addSubview(bgView)
         
         // 背景View的弹出动画
         let popAnimation = CAKeyframeAnimation(keyPath: "transform")
         popAnimation.duration = 0.4
-        popAnimation.values = [ NSValue(CATransform3D: CATransform3DMakeScale(0.01, 0.01, 0.01)),
-            NSValue(CATransform3D: CATransform3DMakeScale(1.1, 1.1, 1.1)),
-            NSValue(CATransform3D: CATransform3DMakeScale(0.9, 0.9, 0.9)),
-            NSValue(CATransform3D: CATransform3DIdentity)]
+        popAnimation.values = [ NSValue(caTransform3D: CATransform3DMakeScale(0.01, 0.01, 0.01)),
+            NSValue(caTransform3D: CATransform3DMakeScale(1.1, 1.1, 1.1)),
+            NSValue(caTransform3D: CATransform3DMakeScale(0.9, 0.9, 0.9)),
+            NSValue(caTransform3D: CATransform3DIdentity)]
         popAnimation.keyTimes = [0.2, 0.5, 0.75, 1.0]
         popAnimation.timingFunctions = [CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut),
             CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut),
             CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)]
-        bgView.layer.addAnimation(popAnimation, forKey: nil)
+        bgView.layer.add(popAnimation, forKey: nil)
         
         tipLabel = UILabel()
         tipLabel.frame = CGRectMakeWithCenter(bgView.width * 0.5, bgView.height * 0.3, bgView.width, 30)
         tipLabel.text = NSLocalizedString("congratulationStr", comment: "")
         tipLabel.font = UIFont(name: "STHupo", size: 18)
-        tipLabel.textAlignment = .Center
-        tipLabel.shadowColor = UIColor.blackColor()
-        tipLabel.shadowOffset = CGSizeMake(1.0, 1.0)
-        tipLabel.textColor = UIColor.whiteColor()
+        tipLabel.textAlignment = .center
+        tipLabel.shadowColor = UIColor.black
+        tipLabel.shadowOffset = CGSize(width: 1.0, height: 1.0)
+        tipLabel.textColor = UIColor.white
         bgView.addSubview(tipLabel)
         
         nextBut = UIButton()
         nextBut.frame = CGRectMakeWithCenter(bgView.width * 0.5, bgView.height * 0.7, 100, 40)
-        nextBut.addTarget(self, action: #selector(SLBCountingAlertViewTool.nextBtnClick), forControlEvents: .TouchUpInside)
-        nextBut.setTitle(NSLocalizedString("countAgainGameStr", comment: ""), forState: .Normal)
-        nextBut.setTitleShadowColor(UIColor.blackColor(), forState: .Normal)
-        nextBut.titleLabel?.shadowOffset = CGSizeMake(1.0, 1.0)
-        nextBut.setBackgroundImage(UIImage(named: "commitBtn_icon"), forState: .Normal)
+        nextBut.addTarget(self, action: #selector(SLBCountingAlertViewTool.nextBtnClick), for: .touchUpInside)
+        nextBut.setTitle(NSLocalizedString("countAgainGameStr", comment: ""), for: UIControlState())
+        nextBut.setTitleShadowColor(UIColor.black, for: UIControlState())
+        nextBut.titleLabel?.shadowOffset = CGSize(width: 1.0, height: 1.0)
+        nextBut.setBackgroundImage(UIImage(named: "commitBtn_icon"), for: UIControlState())
         nextBut.titleLabel?.font = UIFont(name: "STHupo", size: 16)
         bgView.addSubview(nextBut)
         

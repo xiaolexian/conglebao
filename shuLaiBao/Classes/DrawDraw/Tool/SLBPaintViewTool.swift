@@ -12,12 +12,12 @@
 import UIKit
 /**  touch的状态  */
 enum DrawingState {
-    case Began, Moved, Ended
+    case began, moved, ended
 }
 
 
 class SLBPaintViewTool: UIImageView {
-      private var drawingState: DrawingState!
+      fileprivate var drawingState: DrawingState!
     var strokeWidth: CGFloat
     var strokeColor: UIColor
     var imageView:UIImageView!
@@ -25,58 +25,58 @@ class SLBPaintViewTool: UIImageView {
     /**  画笔  */
     var brush: SLBBaseBrushTool!
     /**  保存当前的图形  */
-    private var realImage: UIImage?
-    var drawingStateChangeBlock:((stata: DrawingState)->())?
+    fileprivate var realImage: UIImage?
+    var drawingStateChangeBlock:((_ stata: DrawingState)->())?
     
     override init(image: UIImage?) {
-        self.strokeColor = UIColor.blackColor()
+        self.strokeColor = UIColor.black
         self.strokeWidth = 10
         super.init(image: image)
-        userInteractionEnabled = true
+        isUserInteractionEnabled = true
         
         // 1.添加图层
-        imageView = UIImageView(frame: CGRectMake(0, 0, MyScreenWith, MyScreenHeight))
-        imageView.userInteractionEnabled = true
+        imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: MyScreenWith, height: MyScreenHeight))
+        imageView.isUserInteractionEnabled = true
         imageView.image = UIImage(named: "HaiTun_00")
         addSubview(imageView)
-        userInteractionEnabled = true
+        isUserInteractionEnabled = true
      }
     
     required init?(coder aDecoder: NSCoder) {
-        self.strokeColor = UIColor.blackColor()
+        self.strokeColor = UIColor.black
         self.strokeWidth = 10
         super.init(coder: aDecoder)
     }
     
     // 此处省略init方法与另外两个属性
      // MARK: - touches methods
-     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         if let brush = self.brush {
             brush.lastPoint = nil
-            brush.beginPoint = touches.first?.locationInView(self)
+            brush.beginPoint = touches.first?.location(in: self)
             brush.endPoint = brush.beginPoint
-            self.drawingState = .Began
+            self.drawingState = .began
             self.drawingImage()
             print("开始")
         }
      }
     
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let brush = self.brush {
-            brush.endPoint = touches.first?.locationInView(self)
-            self.drawingState = .Moved
+            brush.endPoint = touches.first?.location(in: self)
+            self.drawingState = .moved
             self.drawingImage()
             print("移动")
          }
     }
     
     // MARK: 手势取消
-    override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
+    override func touchesCancelled(_ touches: Set<UITouch>?, with event: UIEvent?) {
         if let brush = self.brush {
 //            brush.endPoint = nil
-            brush.endPoint = touches!.first?.locationInView(self)
-            self.drawingState = .Ended
+            brush.endPoint = touches!.first?.location(in: self)
+            self.drawingState = .ended
             self.drawingImage()
             undo()
             print("取消")
@@ -84,10 +84,10 @@ class SLBPaintViewTool: UIImageView {
          }
     }
     // MARK: 手势结束
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let brush = self.brush {
-            brush.endPoint = touches.first?.locationInView(self)
-            self.drawingState = .Ended
+            brush.endPoint = touches.first?.location(in: self)
+            self.drawingState = .ended
             self.drawingImage()
             print("结束")
          }
@@ -97,39 +97,39 @@ class SLBPaintViewTool: UIImageView {
     
     // MARK: - drawing
     
-    private func drawingImage() {
+    fileprivate func drawingImage() {
         if let brush = self.brush {
             
             if let drawingStateChangedBlock = self.drawingStateChangeBlock {
-                drawingStateChangedBlock(stata:self.drawingState)
+                drawingStateChangedBlock(self.drawingState)
             }
             
              UIGraphicsBeginImageContext(self.bounds.size)
             
              let context = UIGraphicsGetCurrentContext()
             
-            UIColor.clearColor().setFill()
+            UIColor.clear.setFill()
             UIRectFill(self.bounds)
-            CGContextSetLineCap(context!, CGLineCap.Round)
-            CGContextSetLineWidth(context!, self.strokeWidth)
-            CGContextSetStrokeColorWithColor(context!, self.strokeColor.CGColor)
+            context!.setLineCap(CGLineCap.round)
+            context!.setLineWidth(self.strokeWidth)
+            context!.setStrokeColor(self.strokeColor.cgColor)
             
              if let realImage = self.realImage {
-                realImage.drawInRect(self.bounds)
+                realImage.draw(in: self.bounds)
             }
             
              brush.strokeWidth = self.strokeWidth
             brush.drawInContext(context!)
-            CGContextStrokePath(context!)
+            context!.strokePath()
             
              let previewImage = UIGraphicsGetImageFromCurrentImageContext()
-            if self.drawingState == .Ended || brush.supportedContinuousDrawing() {
+            if self.drawingState == .ended || brush.supportedContinuousDrawing() {
                 self.realImage = previewImage
             }
             UIGraphicsEndImageContext()
          
             // 用 Ended 事件代替原先的 Began 事件
-            if self.drawingState == .Ended {
+            if self.drawingState == .ended {
                 self.boardUndoManager.addImage(self.image!)
             }
             
@@ -142,7 +142,7 @@ class SLBPaintViewTool: UIImageView {
         UIGraphicsBeginImageContext(self.bounds.size)
         self.backgroundColor?.setFill()
         UIRectFill(self.bounds)
-        self.image?.drawInRect(self.bounds)
+        self.image?.draw(in: self.bounds)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image!
@@ -156,13 +156,13 @@ class SLBPaintViewTool: UIImageView {
     
  
     // MARK:-用于撤销的代码
-    private var boardUndoManager = DBUndoManager() // 缓存或Undo控制器
-     private class DBUndoManager {
+    fileprivate var boardUndoManager = DBUndoManager() // 缓存或Undo控制器
+     fileprivate class DBUndoManager {
         class DBImageFault: UIImage {}  // 一个 Fault 对象，与 Core Data 中的 Fault 设计类似
         
-        private static let INVALID_INDEX = -1
-        private var images = [UIImage]()    // 图片栈
-        private var index = INVALID_INDEX   // 一个指针，指向 images 中的某一张图
+        fileprivate static let INVALID_INDEX = -1
+        fileprivate var images = [UIImage]()    // 图片栈
+        fileprivate var index = INVALID_INDEX   // 一个指针，指向 images 中的某一张图
         
         var canUndo: Bool {
             get {
@@ -176,7 +176,7 @@ class SLBPaintViewTool: UIImageView {
             }
         }
         
-        func addImage(image: UIImage) {
+        func addImage(_ image: UIImage) {
             // 当往这个 Manager 中增加图片的时候，先把指针后面的图片全部清掉，
             // 这与我们之前在 drawingImage 方法中对 redoImages 的处理是一样的
             if index < images.count - 1 {
@@ -221,8 +221,8 @@ class SLBPaintViewTool: UIImageView {
         
         // MARK: - Cache
         
-        private static let cahcesLength = 3 // 在内存中保存图片的张数，以 index 为中心点计算：cahcesLength * 2 + 1
-        private func setNeedsCache() {
+        fileprivate static let cahcesLength = 3 // 在内存中保存图片的张数，以 index 为中心点计算：cahcesLength * 2 + 1
+        fileprivate func setNeedsCache() {
             if images.count >= DBUndoManager.cahcesLength {
                 let location = max(0, index - DBUndoManager.cahcesLength)
                 let length = min(images.count - 1, index + DBUndoManager.cahcesLength)
@@ -240,19 +240,19 @@ class SLBPaintViewTool: UIImageView {
             }
         }
         
-        private static var basePath: String = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true).first!
-        private func setFaultImage(image: UIImage, forIndex: Int) {
-            if !image.isKindOfClass(DBImageFault.self) {
-                let imagePath = (DBUndoManager.basePath as NSString).stringByAppendingPathComponent("\(forIndex)")
-                UIImagePNGRepresentation(image)!.writeToFile(imagePath, atomically: false)
+        fileprivate static var basePath: String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+        fileprivate func setFaultImage(_ image: UIImage, forIndex: Int) {
+            if !image.isKind(of: DBImageFault.self) {
+                let imagePath = (DBUndoManager.basePath as NSString).appendingPathComponent("\(forIndex)")
+                try? UIImagePNGRepresentation(image)!.write(to: URL(fileURLWithPath: imagePath), options: [])
                 images[forIndex] = DBImageFault()
             }
         }
         
-        private func setRealImage(image: UIImage, forIndex: Int) {
-            if image.isKindOfClass(DBImageFault.self) {
-                let imagePath = (DBUndoManager.basePath as NSString).stringByAppendingPathComponent("\(forIndex)")
-                images[forIndex] = UIImage(data: NSData(contentsOfFile: imagePath)!)!
+        fileprivate func setRealImage(_ image: UIImage, forIndex: Int) {
+            if image.isKind(of: DBImageFault.self) {
+                let imagePath = (DBUndoManager.basePath as NSString).appendingPathComponent("\(forIndex)")
+                images[forIndex] = UIImage(data: try! Data(contentsOf: URL(fileURLWithPath: imagePath)))!
             }
         }
     }

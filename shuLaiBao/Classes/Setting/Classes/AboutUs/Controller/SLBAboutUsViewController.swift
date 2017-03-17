@@ -30,7 +30,7 @@ class SLBAboutUsViewController: UIViewController {
         // 版本Label
         versionLabel = aboutUsView.versionLabel
         let key = String(kCFBundleVersionKey)
-        let md = NSBundle.mainBundle().infoDictionary
+        let md = Bundle.main.infoDictionary
         let currentVersion = md![key]!
          versionLabel.text = "\(NSLocalizedString("smartBabyStr", comment: "")) \(currentVersion)"
 

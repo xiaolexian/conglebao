@@ -22,12 +22,12 @@ class LDHud: UIView {
         circleView.frame = CGRectMakeWithCenter(MyScreenWith * 0.5, MyScreenHeight * 0.5, 80, 80)
         circleView.layer.cornerRadius = 40
         circleView.layer.masksToBounds = true
-        circleView.backgroundColor = UIColor.blackColor()
+        circleView.backgroundColor = UIColor.black
         circleView.alpha = 0.3
         addSubview(circleView)
         
         caiDie = UIImageView()
-        caiDie.userInteractionEnabled = true
+        caiDie.isUserInteractionEnabled = true
         let caiDieW:CGFloat = 100
         caiDie.frame = CGRectMakeWithCenter(MyScreenWith * 0.48, MyScreenHeight * 0.49, caiDieW, caiDieW)
          addSubview(caiDie)
@@ -41,7 +41,7 @@ class LDHud: UIView {
     }
     
     //    MARK:- 序列动画
-    func imageAnimation(imageName:String, imageNumber: Int, RepeatCount: Int, imageViews:UIImageView, duration: CGFloat){
+    func imageAnimation(_ imageName:String, imageNumber: Int, RepeatCount: Int, imageViews:UIImageView, duration: CGFloat){
         var imagArray = [UIImage]()
         for indext in 0..<imageNumber{
             let imageStr = String(format: "\(imageName)%d",indext)

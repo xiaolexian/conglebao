@@ -15,7 +15,7 @@ class SLBNavViewController: UINavigationController {
         super.viewDidLoad()
     }
     
-    override func pushViewController(viewController: UIViewController, animated: Bool) {
+    override func pushViewController(_ viewController: UIViewController, animated: Bool) {
         if viewControllers.count > 0 {
              viewController.navigationItem.leftBarButtonItem = SLBBarButttonItem.bauttonItem(self, actions:#selector(SLBNavViewController.back), imageName: "nav_btn_back", hightImaeName: "nav_btn_back")
         }
@@ -24,6 +24,6 @@ class SLBNavViewController: UINavigationController {
     }
     
     func back() {
-        popViewControllerAnimated(true)
+        popViewController(animated: true)
     }
 }

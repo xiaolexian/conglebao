@@ -29,11 +29,11 @@ class SLBContactUsViewController: UIViewController, UITextViewDelegate {
         title = "意见反馈"
         
         navSendButton = UIButton()
-        navSendButton.bounds = CGRectMake(0, 0, 44, 44)
-        navSendButton.titleLabel?.font = UIFont.systemFontOfSize(14)
-        navSendButton.setTitle("发送", forState: .Normal)
-        navSendButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        navSendButton.addTarget(self, action: #selector(SLBContactUsViewController.navSendButtonClick), forControlEvents: .TouchUpInside)
+        navSendButton.bounds = CGRect(x: 0, y: 0, width: 44, height: 44)
+        navSendButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        navSendButton.setTitle("发送", for: UIControlState())
+        navSendButton.setTitleColor(UIColor.black, for: UIControlState())
+        navSendButton.addTarget(self, action: #selector(SLBContactUsViewController.navSendButtonClick), for: .touchUpInside)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: navSendButton)
     }
@@ -44,15 +44,15 @@ class SLBContactUsViewController: UIViewController, UITextViewDelegate {
         
         // 添加收件人
         let toRecipients = emailArr
-        mailUrl += "mailto:\(toRecipients.joinWithSeparator(","))"
+        mailUrl += "mailto:\(toRecipients.joined(separator: ","))"
         
         // 添加抄送
         let ccRecipients = [""]
-        mailUrl += "?cc=\(ccRecipients.joinWithSeparator(","))"
+        mailUrl += "?cc=\(ccRecipients.joined(separator: ","))"
         
         // 添加密送
         let bccRecipients = [""]
-        mailUrl += "&bcc=\(bccRecipients.joinWithSeparator(","))"
+        mailUrl += "&bcc=\(bccRecipients.joined(separator: ","))"
         
         // 添加主题
         let subjectString = "关于童乐宝的反馈建议"
@@ -63,8 +63,8 @@ class SLBContactUsViewController: UIViewController, UITextViewDelegate {
         mailUrl += "&body=<b>\(bodyString)</b>"
         
         // 发送邮件
-        let email = mailUrl.stringByAddingPercentEncodingWithAllowedCharacters( NSCharacterSet.URLQueryAllowedCharacterSet())
-        UIApplication.sharedApplication().openURL(NSURL(string: email!)!)
+        let email = mailUrl.addingPercentEncoding( withAllowedCharacters: CharacterSet.urlQueryAllowed)
+        UIApplication.shared.openURL(URL(string: email!)!)
     }
     
     // MARK: - 初始化视图
@@ -85,7 +85,7 @@ class SLBContactUsViewController: UIViewController, UITextViewDelegate {
     }
     
     // MARK: - TextView的代理方法
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         if textView.text == "" {
             placeholderLabel.text = "请输入产品意见,我们将不断优化体验"
         } else {
@@ -95,13 +95,13 @@ class SLBContactUsViewController: UIViewController, UITextViewDelegate {
         if textView.text.characters.count > 100 {
             let alert = UIAlertView(title: "提示", message: "字符个数不能大于100", delegate: nil, cancelButtonTitle: NSLocalizedString("commitStr", comment: ""))
             alert.show()
-            let index = textView.text.startIndex.advancedBy(100)
-            textView.text = textView.text.substringToIndex(index)
+            let index = textView.text.index(textView.text.startIndex, offsetBy: 100)
+            textView.text = textView.text.substring(to: index)
         }
         numberLabel.text = "\(textView.text.characters.count)/100"
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         contentTextView.resignFirstResponder()
     }
 }

@@ -10,8 +10,8 @@ import AVFoundation
 
 class LDAudioPlayerTool: NSObject {
 
-    enum Exc: ErrorType {
-        case Oops
+    enum Exc: Error {
+        case oops
     }
 
     var thePlayers:AVAudioPlayer!
@@ -19,9 +19,9 @@ class LDAudioPlayerTool: NSObject {
     
     override init()  {
          super.init()
-          let musicURL  = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("backGround_sound", ofType: "mp3")!)
+          let musicURL  = URL(fileURLWithPath: Bundle.main.path(forResource: "backGround_sound", ofType: "mp3")!)
          do{
-            thePlayers  = try AVAudioPlayer(contentsOfURL: musicURL)
+            thePlayers  = try AVAudioPlayer(contentsOf: musicURL)
             thePlayers.prepareToPlay()
             thePlayers.numberOfLoops = -1
             thePlayers.volume = 0.5

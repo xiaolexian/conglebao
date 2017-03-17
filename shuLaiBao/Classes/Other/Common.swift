@@ -11,39 +11,39 @@ import UIKit
 let emailArr = ["liudeng1989@163.com", "799588489@qq.com"]
 
 public var MyScreen: CGRect{
-    return  UIScreen.mainScreen().bounds
+    return  UIScreen.main.bounds
 }
 
 public var MyScreenHeight: CGFloat{
-    return  UIScreen.mainScreen().bounds.size.height
+    return  UIScreen.main.bounds.size.height
 }
 
 public var MyScreenWith: CGFloat{
-    return  UIScreen.mainScreen().bounds.size.width
+    return  UIScreen.main.bounds.size.width
 }
 
 public var myScreenSize: CGSize{
-    return  UIScreen.mainScreen().bounds.size
+    return  UIScreen.main.bounds.size
 }
 
 // RGB颜色
-public func RGBColor(r: CGFloat, _ g: CGFloat, _ b: CGFloat) -> UIColor {
+public func RGBColor(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat) -> UIColor {
     return UIColor(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: 1.0)
 }
 
 
 // 随机数
-public func myRandom(max: Int) -> Int {
+public func myRandom(_ max: Int) -> Int {
     return Int(arc4random_uniform(UInt32(max) + 1))
 }
-public func myRandom(min: Int, max: Int) -> Int {
+public func myRandom(_ min: Int, max: Int) -> Int {
     return myRandom(max - min) + min
 }
 
 // 判断设备
 public func deviceTypeIpone4() ->Bool{
-     return UIScreen.mainScreen().bounds.size.height == 480
+     return UIScreen.main.bounds.size.height == 480
 }
 public func deviceTypeIpone5s() ->Bool{
-    return UIScreen.mainScreen().bounds.size.height == 568
+    return UIScreen.main.bounds.size.height == 568
 }
